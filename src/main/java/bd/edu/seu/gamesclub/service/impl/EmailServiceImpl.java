@@ -31,11 +31,14 @@ public class EmailServiceImpl implements EmailService {
     private final int otpExpiryMinutes;
 
     public EmailServiceImpl(JavaMailSender mailSender,
-                            @Value("${app.mail.from}") String from,
+                            @Value("${app.mail.from:}") String from,
+                            @Value("${spring.mail.username:}") String mailUsername,
                             @Value("${app.club.name}") String clubName,
                             @Value("${app.otp.expiry-minutes:5}") int otpExpiryMinutes) {
         this.mailSender = mailSender;
-        this.from = from;
+        // Fall back to the authenticated SMTP account when no explicit From is set,
+        // so Gmail does not reject/rewrite a mismatched sender address.
+        this.from = (from == null || from.isBlank()) ? mailUsername : from;
         this.clubName = clubName;
         this.otpExpiryMinutes = otpExpiryMinutes;
     }
@@ -122,6 +125,11 @@ public class EmailServiceImpl implements EmailService {
 
     /** Builds and sends a MIME (HTML) message; logs and swallows failures. */
     private void send(String to, String subject, String htmlBody) {
+        if (from == null || from.isBlank()) {
+            log.warn("Email NOT sent to {} - SMTP is not configured. Set MAIL_USERNAME, MAIL_PASSWORD "
+                    + "(Gmail App Password) and optionally MAIL_FROM.", to);
+            return;
+        }
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
@@ -130,9 +138,9 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             mailSender.send(message);
-            log.debug("Email sent to {} ({})", to, subject);
+            log.info("Email sent to {} ({})", to, subject);
         } catch (Exception ex) {
-            log.error("Failed to send email to {}: {}", to, ex.getMessage());
+            log.error("Failed to send email to {} ({}). Check SMTP credentials / Gmail App Password.", to, subject, ex);
         }
     }
 }
