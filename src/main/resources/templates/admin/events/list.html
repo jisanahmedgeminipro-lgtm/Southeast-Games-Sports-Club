@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Events | SEU Admin', 'Manage events.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('events')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Events')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Events</h2>
+                <div class="admin-head__actions"><a class="btn btn-primary" th:href="@{/admin/events/new}"><i class="bi bi-plus-lg"></i> Add Event</a></div></div>
+
+            <div class="dt dt--responsive" id="eventsTable" data-enhanced-table data-page-size="10"
+                 data-export-name="events" data-bulk-action="/admin/events/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search events..."></div>
+                    <select class="dt__filter" data-dt-filter data-col="5">
+                        <option value="">All statuses</option>
+                        <option value="UPCOMING">Upcoming</option><option value="ONGOING">Ongoing</option>
+                        <option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar><span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button></div>
+                <div class="table-wrap"><table class="table">
+                    <thead><tr><th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                        <th data-dt-skip>Banner</th><th data-sort>Title</th><th data-sort>Date</th>
+                        <th data-sort>Venue</th><th data-sort>Status</th><th data-dt-skip>Actions</th></tr></thead>
+                    <tbody>
+                        <tr th:each="e : ${events}">
+                            <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${e.id}"></td>
+                            <td data-dt-skip><img class="img-thumb" th:if="${e.bannerUrl != null}" th:src="${e.bannerUrl}" alt=""><span class="img-thumb" th:unless="${e.bannerUrl != null}"></span></td>
+                            <td data-label="Title" th:text="${e.title}">Event</td>
+                            <td data-label="Date" th:text="${e.eventDate}">2026-01-01</td>
+                            <td data-label="Venue" th:text="${e.venue}">Venue</td>
+                            <td data-label="Status" th:text="${e.status}">UPCOMING</td>
+                            <td data-label="Actions" data-dt-skip><div class="row-actions">
+                                <a class="icon-btn" th:href="@{/admin/events/{id}/edit(id=${e.id})}"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{/admin/events/{id}/delete(id=${e.id})}" method="post" class="form-inline">
+                                    <button class="icon-btn" type="button" data-confirm="Delete this event?" data-confirm-title="Delete event?"><i class="bi bi-trash"></i></button>
+                                </form></div></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(events)}"><td colspan="7">
+                            <div th:replace="~{fragments/components :: emptyState('bi-calendar-event','No events yet','Create your first event.','/admin/events/new','Add Event')}"></div></td></tr>
+                    </tbody>
+                </table></div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

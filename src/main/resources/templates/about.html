@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('About | SEU Games & Sports Club', 'Learn about the mission, vision and story of the Southeast University Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('about')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">About the Club</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Spirit, teamwork and excellence - on and off the field.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('About')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container grid grid-2 u-items-center u-gap-wide">
+            <div data-aos="fade-right">
+                <span class="eyebrow u-mb-2">Our Story</span>
+                <h2 th:text="${clubSettings != null ? clubSettings.clubName : 'Southeast University Games & Sports Club'}">Club</h2>
+                <p th:text="${clubSettings != null and clubSettings.aboutClub != null ? clubSettings.aboutClub :
+                   'Founded to unite students through sport, the club has grown into a vibrant community championing competition, fitness and friendship across the campus.'}">About text</p>
+                <p class="u-mt-2" th:if="${clubSettings != null and clubSettings.establishedYear != null}">
+                    <strong>Established:</strong> <span th:text="${clubSettings.establishedYear}">2010</span>
+                </p>
+            </div>
+            <div class="card glass card-pad" data-aos="fade-left">
+                <blockquote class="quote" th:text="${clubSettings != null and clubSettings.motto != null ? clubSettings.motto : '“Sportsmanship is the soul of every champion.”'}">Motto</blockquote>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--alt">
+        <div class="container grid grid-2">
+            <div class="card card-pad" data-aos="fade-up">
+                <div class="brand__logo brand__logo--lg u-mb-2"><i class="bi bi-bullseye"></i></div>
+                <h3>Our Mission</h3>
+                <p>To inspire a culture of active participation, discipline and excellence, giving every student the platform to discover and develop their athletic potential.</p>
+            </div>
+            <div class="card card-pad" data-aos="fade-up" data-aos-delay="100">
+                <div class="brand__logo brand__logo--lg u-mb-2"><i class="bi bi-eye"></i></div>
+                <h3>Our Vision</h3>
+                <p>To be the most respected university sports club in the region - a benchmark for talent, integrity and sporting achievement.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="stats">
+                <div class="stat glass" data-aos="fade-up"><div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalStudents : 2500}" data-counter="2500">0</span></div><div class="stat__label">Members</div></div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="100"><div class="stat__num text-gradient"><span th:attr="data-counter=${stats != null ? stats.totalSports : 7}" data-counter="7">0</span></div><div class="stat__label">Sports</div></div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="200"><div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalEvents : 120}" data-counter="120">0</span></div><div class="stat__label">Events</div></div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="300"><div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalAchievements : 45}" data-counter="45">0</span></div><div class="stat__label">Trophies</div></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

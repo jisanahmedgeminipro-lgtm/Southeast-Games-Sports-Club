@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Login | SEU Games & Sports Club', 'Sign in to your SEU Games & Sports Club account.')}"></head>
+<body>
+<div class="auth">
+    <!-- Showcase -->
+    <aside class="auth__aside">
+        <a class="auth__back" th:href="@{/}"><i class="bi bi-arrow-left"></i> Back to website</a>
+        <a class="brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span>
+            <span class="brand__name">Games &amp; Sports Club<small>Southeast University</small></span></a>
+        <div class="auth__aside-content">
+            <h2>Welcome back, champion.</h2>
+            <p>Sign in to manage your membership, apply during open seasons and stay on top of every event.</p>
+            <ul class="auth__points">
+                <li><i class="bi bi-check-circle-fill"></i> Track your membership status</li>
+                <li><i class="bi bi-check-circle-fill"></i> Apply when registration opens</li>
+                <li><i class="bi bi-check-circle-fill"></i> Get event &amp; news notifications</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Form -->
+    <main class="auth__main">
+        <div class="auth__card">
+            <div class="top">
+                <h1>Sign in</h1>
+                <p class="sub">Use your official <strong>@seu.edu.bd</strong> account.</p>
+            </div>
+
+            <div class="alert alert-danger" th:if="${param.error}" role="alert">Invalid email or password. Please try again.</div>
+            <div class="alert alert-success" th:if="${param.logout}" role="alert">You have been signed out.</div>
+            <div class="alert alert-success" th:if="${param.registered}" role="alert">Registration complete - you can now sign in.</div>
+            <div class="alert alert-success" th:if="${param.reset}" role="alert">Password updated - please sign in.</div>
+
+            <form th:action="@{/login}" method="post" novalidate>
+                <div class="field">
+                    <label for="username">University Email</label>
+                    <input class="control" id="username" name="username" type="email" autocomplete="email"
+                           placeholder="2023000000000@seu.edu.bd" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <input class="control" id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+                        <button class="toggle-eye" type="button" data-toggle-password="#password" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-aux">
+                    <label class="checkbox"><input type="checkbox" name="remember-me"> Remember me</label>
+                    <a class="link-muted" th:href="@{/forgot-password}">Forgot password?</a>
+                </div>
+
+                <button class="btn btn-primary btn-block btn-lg" type="submit"><i class="bi bi-box-arrow-in-right"></i> Sign in</button>
+            </form>
+
+            <p class="auth__alt">Don't have an account? <a th:href="@{/register}">Create one</a></p>
+        </div>
+    </main>
+</div>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

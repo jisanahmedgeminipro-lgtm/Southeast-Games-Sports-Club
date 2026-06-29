@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+  ============================================================================
+   Reusable site footer fragment.
+   Usage in any page/layout:
+       <div th:replace="~{fragments/footer :: siteFooter}"></div>
+
+   Requires:
+       - /css/footer.css  (link it in your layout <head>)
+       - Bootstrap Icons (already provided via the bootstrap-icons webjar)
+
+   Optional model attributes (the footer degrades gracefully if any are absent,
+   so it renders correctly even before the frontend controllers are wired):
+       clubSettings : ClubSettings        -> clubName, motto, address, phone, email, googleMapLink
+       socialLinks  : List<SocialLink>    -> platform, url, iconClass
+       footerSports : List<Sport>         -> name, slug
+
+   IMPORTANT (permanent developer credit):
+       The "Designed & Developed by Jisan" credit at the very bottom is
+       intentionally HARD-CODED in this template. It must NOT be made editable
+       or removable from the Admin Dashboard or any settings screen. Leave it
+       in place as a permanent part of the application.
+  ============================================================================
+-->
+<body>
+
+<footer th:fragment="siteFooter" class="site-footer" role="contentinfo">
+    <div class="site-footer__container">
+
+        <div class="site-footer__grid">
+
+            <!-- ===================== Brand + Social ===================== -->
+            <div class="site-footer__col site-footer__brand">
+                <h3 class="site-footer__title"
+                    th:text="${clubSettings != null ? clubSettings.clubName : 'Games & Sports Club'}">
+                    Games &amp; Sports Club
+                </h3>
+                <p class="site-footer__tagline"
+                   th:text="${clubSettings != null and clubSettings.motto != null
+                              ? clubSettings.motto : 'Fostering sportsmanship, teamwork and excellence.'}">
+                    Fostering sportsmanship, teamwork and excellence.
+                </p>
+
+                <!-- ===================== Social Media Links ===================== -->
+                <ul class="site-footer__social" aria-label="Social media links">
+                    <li th:if="${socialLinks != null}" th:each="link : ${socialLinks}">
+                        <a th:href="${link.url}" target="_blank" rel="noopener noreferrer"
+                           th:attr="aria-label=${link.platform}" title="">
+                            <i class="bi" th:classappend="${link.iconClass}"></i>
+                        </a>
+                    </li>
+                    <!-- Static fallback when no social links are configured yet -->
+                    <th:block th:if="${socialLinks == null or #lists.isEmpty(socialLinks)}">
+                        <li><a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a></li>
+                        <li><a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a></li>
+                        <li><a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a></li>
+                        <li><a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a></li>
+                    </th:block>
+                </ul>
+            </div>
+
+            <!-- ===================== Quick Links ===================== -->
+            <nav class="site-footer__col" aria-label="Quick links">
+                <h4 class="site-footer__heading">Quick Links</h4>
+                <ul class="site-footer__links">
+                    <li><a th:href="@{|/#about|}" href="#about">About Club</a></li>
+                    <li><a th:href="@{|/#committee|}" href="#committee">Committee</a></li>
+                    <li><a th:href="@{|/#events|}" href="#events">Events</a></li>
+                    <li><a th:href="@{|/#news|}" href="#news">News</a></li>
+                    <li><a th:href="@{|/#gallery|}" href="#gallery">Gallery</a></li>
+                    <li><a th:href="@{|/#achievements|}" href="#achievements">Achievements</a></li>
+                    <li><a th:href="@{|/#contact|}" href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- ===================== Sports ===================== -->
+            <nav class="site-footer__col" aria-label="Sports">
+                <h4 class="site-footer__heading">Sports</h4>
+                <ul class="site-footer__links">
+                    <li th:if="${footerSports != null}" th:each="sport : ${footerSports}">
+                        <a th:href="@{|/#sports|}" th:text="${sport.name}">Sport</a>
+                    </li>
+                    <!-- Static fallback: the seven default sports -->
+                    <th:block th:if="${footerSports == null or #lists.isEmpty(footerSports)}">
+                        <li><a th:href="@{|/#sports|}" href="#sports">Football</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Cricket</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Basketball</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Volleyball</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Badminton</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Table Tennis</a></li>
+                        <li><a th:href="@{|/#sports|}" href="#sports">Chess</a></li>
+                    </th:block>
+                </ul>
+            </nav>
+
+            <!-- ===================== Contact Information ===================== -->
+            <div class="site-footer__col" aria-label="Contact information">
+                <h4 class="site-footer__heading">Contact</h4>
+                <ul class="site-footer__contact">
+                    <li>
+                        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                        <span th:text="${clubSettings != null and clubSettings.address != null
+                                         ? clubSettings.address
+                                         : 'Southeast University, Tejgaon, Dhaka, Bangladesh'}">
+                            Southeast University, Tejgaon, Dhaka, Bangladesh
+                        </span>
+                    </li>
+                    <li th:if="${clubSettings == null or clubSettings.phone != null}">
+                        <i class="bi bi-telephone" aria-hidden="true"></i>
+                        <a th:if="${clubSettings != null and clubSettings.phone != null}"
+                           th:href="${'tel:' + clubSettings.phone}"
+                           th:text="${clubSettings.phone}">+880 0000 000000</a>
+                        <span th:if="${clubSettings == null}">+880 0000 000000</span>
+                    </li>
+                    <li th:if="${clubSettings == null or clubSettings.email != null}">
+                        <i class="bi bi-envelope" aria-hidden="true"></i>
+                        <a th:if="${clubSettings != null and clubSettings.email != null}"
+                           th:href="${'mailto:' + clubSettings.email}"
+                           th:text="${clubSettings.email}">sportsclub@seu.edu.bd</a>
+                        <span th:if="${clubSettings == null}">sportsclub@seu.edu.bd</span>
+                    </li>
+                    <li th:if="${clubSettings != null and clubSettings.googleMapLink != null}">
+                        <i class="bi bi-map" aria-hidden="true"></i>
+                        <a th:href="${clubSettings.googleMapLink}" target="_blank" rel="noopener noreferrer">
+                            View on Google Maps
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div><!-- /.site-footer__grid -->
+
+        <!-- ===================== Bottom bar ===================== -->
+        <div class="site-footer__bottom">
+            <p class="site-footer__copyright">
+                &copy; <span th:text="${T(java.time.Year).now()}">2026</span>
+                Southeast University Games &amp; Sports Club. All Rights Reserved.
+            </p>
+
+            <!--
+              PERMANENT DEVELOPER CREDIT - do not remove or make editable.
+              TODO: replace the GitHub href below with Jisan's GitHub profile URL
+                    once provided. If a portfolio / LinkedIn URL is supplied later,
+                    add them as the extra anchors already stubbed below.
+            -->
+            <p class="site-footer__credit">
+                Designed &amp; Developed by
+                <a class="dev-credit-link"
+                   href="https://github.com/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Jisan - Developer GitHub profile">Jisan</a>
+                <!--
+                <a class="dev-credit-link dev-credit-link--secondary"
+                   href="PORTFOLIO_URL_HERE" target="_blank" rel="noopener noreferrer">Portfolio</a>
+                <a class="dev-credit-link dev-credit-link--secondary"
+                   href="LINKEDIN_URL_HERE" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                -->
+            </p>
+        </div>
+
+    </div><!-- /.site-footer__container -->
+</footer>
+
+</body>
+</html>

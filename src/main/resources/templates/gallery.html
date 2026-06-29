@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Gallery | SEU Games & Sports Club', 'Photo gallery capturing memorable moments from the SEU Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('gallery')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Gallery</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Moments worth remembering.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Gallery')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="gallery-filters" th:if="${galleryCategories != null and !#lists.isEmpty(galleryCategories)}">
+                <button class="active" data-filter="all" type="button">All</button>
+                <button th:each="cat : ${galleryCategories}" type="button" th:attr="data-filter=${cat.slug}" th:text="${cat.name}">Category</button>
+            </div>
+
+            <div class="gallery-grid" th:if="${galleryImages != null and !#lists.isEmpty(galleryImages)}">
+                <a class="gallery-item" data-aos="fade-up" th:each="img : ${galleryImages}"
+                   th:attr="data-category=${img.categorySlug != null ? img.categorySlug : 'all'}"
+                   th:href="${img.url != null} ? ${img.url} : '#'" target="_blank" rel="noopener">
+                    <img th:if="${img.url != null}" th:src="${img.url}" th:alt="${img.caption} ?: 'Gallery image'" loading="lazy" decoding="async">
+                </a>
+            </div>
+            <div th:if="${galleryImages == null or #lists.isEmpty(galleryImages)}"
+                 th:replace="~{fragments/components :: emptyState('bi-images', 'No photos yet', 'Photos from our events and tournaments will appear here.', null, null)}"></div>
+
+            <nav th:replace="~{fragments/ui :: pagination(${galleryPage}, '/gallery')}"></nav>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

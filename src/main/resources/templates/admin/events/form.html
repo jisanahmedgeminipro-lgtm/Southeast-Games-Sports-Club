@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Event | SEU Admin', 'Create or edit an event.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('events')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Event')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${event != null} ? 'Edit Event' : 'New Event'">Event</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/events}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/events/save}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:if="${event != null}" th:value="${event.id}">
+                <div class="field"><label for="title">Title</label>
+                    <input class="control" id="title" name="title" type="text" required th:value="${event?.title}"></div>
+                <div class="field"><label for="description">Description</label>
+                    <textarea class="control" id="description" name="description" rows="4" th:text="${event?.description}"></textarea></div>
+                <div class="form-grid">
+                    <div class="field"><label for="eventDate">Date</label>
+                        <input class="control" id="eventDate" name="eventDate" type="date" required th:value="${event?.eventDate}"></div>
+                    <div class="field"><label for="eventTime">Time</label>
+                        <input class="control" id="eventTime" name="eventTime" type="time" th:value="${event?.eventTime}"></div>
+                    <div class="field"><label for="venue">Venue</label>
+                        <input class="control" id="venue" name="venue" type="text" th:value="${event?.venue}"></div>
+                    <div class="field"><label for="registrationDeadline">Registration Deadline</label>
+                        <input class="control" id="registrationDeadline" name="registrationDeadline" type="datetime-local" th:value="${event?.registrationDeadline}"></div>
+                    <div class="field"><label for="status">Status</label>
+                        <select class="control" id="status" name="status">
+                            <option value="UPCOMING" th:selected="${event == null or event.status == 'UPCOMING'}">Upcoming</option>
+                            <option value="ONGOING" th:selected="${event != null and event.status == 'ONGOING'}">Ongoing</option>
+                            <option value="COMPLETED" th:selected="${event != null and event.status == 'COMPLETED'}">Completed</option>
+                            <option value="CANCELLED" th:selected="${event != null and event.status == 'CANCELLED'}">Cancelled</option>
+                        </select></div>
+                    <div class="field"><label for="sportId">Related Sport</label>
+                        <select class="control" id="sportId" name="sportId">
+                            <option value="">None</option>
+                            <option th:each="sp : ${sports}" th:value="${sp.id}" th:text="${sp.name}"
+                                    th:selected="${event != null and event.sportId == sp.id}">Sport</option>
+                        </select></div>
+                </div>
+
+                <label class="u-fw-600 u-mb-1 u-block">Banner</label>
+                <img class="current-image" th:if="${event != null and event.bannerUrl != null}" th:src="${event.bannerUrl}" alt="Banner">
+                <input type="hidden" name="currentBannerMediaId" th:value="${event?.bannerMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('bannerFile','Upload banner (optional)',false)}"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/events}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

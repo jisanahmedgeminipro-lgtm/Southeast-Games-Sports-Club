@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Messages | SEU Admin', 'View contact messages.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('messages')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Contact Messages')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Contact Messages</h2></div>
+
+            <div class="dt dt--responsive" id="msgTable" data-enhanced-table data-page-size="15"
+                 data-export-name="contact-messages" data-bulk-action="/admin/messages/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search messages..."></div>
+                    <select class="dt__filter" data-dt-filter data-col="4">
+                        <option value="">All</option><option value="New">New</option><option value="Read">Read</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar><span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button></div>
+                <div class="table-wrap"><table class="table">
+                    <thead><tr><th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                        <th data-sort>Name</th><th data-sort>Email</th><th data-sort>Subject</th>
+                        <th data-sort>Status</th><th data-sort>Received</th><th data-dt-skip>Actions</th></tr></thead>
+                    <tbody>
+                        <tr th:each="m : ${messages}">
+                            <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${m.id}"></td>
+                            <td data-label="Name" th:text="${m.name}">Name</td>
+                            <td data-label="Email" th:text="${m.email}">email</td>
+                            <td data-label="Subject" th:text="${m.subject} ?: '(no subject)'">Subject</td>
+                            <td data-label="Status"><span class="badge" th:classappend="${m.read} ? 'badge--slate' : 'badge--amber'" th:text="${m.read} ? 'Read' : 'New'">New</span></td>
+                            <td data-label="Received" th:text="${m.createdAt}">date</td>
+                            <td data-label="Actions" data-dt-skip><div class="row-actions">
+                                <a class="icon-btn" th:href="@{/admin/messages/{id}(id=${m.id})}" title="View"><i class="bi bi-eye"></i></a>
+                                <form th:action="@{/admin/messages/{id}/delete(id=${m.id})}" method="post" class="form-inline">
+                                    <button class="icon-btn" type="button" data-confirm="Delete this message?" data-confirm-title="Delete message?"><i class="bi bi-trash"></i></button>
+                                </form></div></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(messages)}"><td colspan="7">
+                            <div th:replace="~{fragments/components :: emptyState('bi-chat-dots','No messages','Visitor messages will appear here.',null,null)}"></div></td></tr>
+                    </tbody>
+                </table></div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

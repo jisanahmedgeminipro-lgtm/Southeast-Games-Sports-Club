@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Executive Committee | SEU Games & Sports Club', 'Meet the Executive Committee leading the Southeast University Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('committee')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Executive Committee</h1>
+            <p data-aos="fade-up" data-aos-delay="100">The leaders steering our club toward excellence.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Executive Committee')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-4" th:if="${committeeMembers != null and !#lists.isEmpty(committeeMembers)}">
+                <article class="card member-card" data-aos="fade-up" th:each="m,i : ${committeeMembers}" th:attr="data-aos-delay=${i.index * 50}">
+                    <img class="member-card__avatar" th:if="${m.photoUrl != null}" th:src="${m.photoUrl}" th:alt="${m.name}" loading="lazy" decoding="async">
+                    <div class="member-card__avatar avatar-fallback" th:if="${m.photoUrl == null}"><i class="bi bi-person"></i></div>
+                    <h3 class="card__title" th:text="${m.name}">Member Name</h3>
+                    <div class="member-card__role" th:text="${m.position}">Position</div>
+                    <p class="u-sm u-mt-1" th:text="${m.department + ' · Batch ' + m.batch}">Dept · Batch</p>
+                    <div class="member-card__socials">
+                        <a th:if="${m.facebookUrl != null}" th:href="${m.facebookUrl}" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a th:if="${m.linkedinUrl != null}" th:href="${m.linkedinUrl}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${committeeMembers == null or #lists.isEmpty(committeeMembers)}"
+                 th:replace="~{fragments/components :: emptyState('bi-people', 'No members yet', 'Executive committee members will be published here soon.', null, null)}"></div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

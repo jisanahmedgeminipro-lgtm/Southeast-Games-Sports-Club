@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Register | SEU Games & Sports Club', 'Create your SEU Games & Sports Club student account.')}"></head>
+<body>
+<div class="auth">
+    <aside class="auth__aside">
+        <a class="auth__back" th:href="@{/}"><i class="bi bi-arrow-left"></i> Back to website</a>
+        <a class="brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span>
+            <span class="brand__name">Games &amp; Sports Club<small>Southeast University</small></span></a>
+        <div class="auth__aside-content">
+            <h2>Join the movement.</h2>
+            <p>Create your account with your university email. We'll verify it with a one-time code, then you're in.</p>
+            <ul class="auth__points">
+                <li><i class="bi bi-shield-check"></i> Only <strong>@seu.edu.bd</strong> emails allowed</li>
+                <li><i class="bi bi-envelope-check"></i> Email verified via OTP</li>
+                <li><i class="bi bi-lock"></i> Your password is securely encrypted</li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="auth__main">
+        <div class="auth__card auth__card--wide">
+            <div class="top">
+                <h1>Create account</h1>
+                <p class="sub">Fill in your details to get started.</p>
+            </div>
+
+            <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}" role="alert"></div>
+
+            <!-- th:object binds to a RegisterForm DTO (added in a later module) -->
+            <form th:action="@{/register}" method="post" th:object="${registerForm}" novalidate>
+                <div class="field">
+                    <label for="email">University Email</label>
+                    <input class="control" id="email" type="email" th:field="*{email}" placeholder="2023000000000@seu.edu.bd" required>
+                    <span class="hint">Must end with @seu.edu.bd</span>
+                    <span class="error" th:if="${#fields != null and #fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="field"><label for="fullName">Full Name</label><input class="control" id="fullName" type="text" th:field="*{fullName}" required></div>
+                    <div class="field"><label for="studentId">Student ID</label><input class="control" id="studentId" type="text" th:field="*{studentId}" required></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field"><label for="department">Department</label><input class="control" id="department" type="text" th:field="*{department}" required></div>
+                    <div class="field"><label for="phone">Phone</label><input class="control" id="phone" type="tel" th:field="*{phone}" required></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field"><label for="batch">Batch</label><input class="control" id="batch" type="text" th:field="*{batch}" required></div>
+                    <div class="field"><label for="semester">Semester</label><input class="control" id="semester" type="text" th:field="*{semester}" required></div>
+                </div>
+
+                <div class="field">
+                    <label for="gender">Gender</label>
+                    <select class="control" id="gender" th:field="*{gender}" required>
+                        <option value="">Select...</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label for="regPassword">Password</label>
+                        <div class="input-group">
+                            <input class="control" id="regPassword" type="password" th:field="*{password}" autocomplete="new-password" required>
+                            <button class="toggle-eye" type="button" data-toggle-password="#regPassword" aria-label="Show password"><i class="bi bi-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input class="control" id="confirmPassword" type="password" th:field="*{confirmPassword}" autocomplete="new-password" required>
+                    </div>
+                </div>
+
+                <label class="checkbox terms-check"><input type="checkbox" required> I agree to the club's terms and code of conduct.</label>
+
+                <button class="btn btn-primary btn-block btn-lg" type="submit"><i class="bi bi-person-plus"></i> Create account</button>
+            </form>
+
+            <p class="auth__alt">Already a member? <a th:href="@{/login}">Sign in</a></p>
+        </div>
+    </main>
+</div>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

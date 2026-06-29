@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Under Maintenance | SEU Games & Sports Club', 'The site is temporarily down for scheduled maintenance.')}"></head>
+<body>
+<section class="status-page">
+    <div class="status-page__inner">
+        <div class="empty-state__icon empty-state__icon--light u-mx-auto u-mb-3" aria-hidden="true">
+            <i class="bi bi-cone-striped"></i>
+        </div>
+        <h1>We'll be right back</h1>
+        <p th:text="${maintenanceMessage} ?: 'The site is currently undergoing scheduled maintenance. Please check back shortly - thank you for your patience.'">
+            The site is currently undergoing scheduled maintenance.
+        </p>
+        <div class="status-page__actions">
+            <a class="btn btn-light btn-lg" th:href="@{/}"><i class="bi bi-arrow-clockwise"></i> Refresh</a>
+        </div>
+    </div>
+</section>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

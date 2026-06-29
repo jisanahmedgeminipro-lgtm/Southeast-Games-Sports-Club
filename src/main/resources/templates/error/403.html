@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Access Denied | SEU Games & Sports Club', 'You do not have permission to access this page.')}"></head>
+<body>
+<section class="status-page">
+    <div class="status-page__inner">
+        <p class="status-page__code">403</p>
+        <h1>Access denied</h1>
+        <p>You don't have permission to view this page. If you believe this is a mistake, please sign in with the right account or contact an administrator.</p>
+        <div class="status-page__actions">
+            <a class="btn btn-light btn-lg" th:href="@{/}"><i class="bi bi-house"></i> Back to home</a>
+            <a class="btn btn-outline btn-lg" th:href="@{/login}"><i class="bi bi-box-arrow-in-right"></i> Sign in</a>
+        </div>
+    </div>
+</section>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Message | SEU Admin', 'View a contact message.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('messages')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Message')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${message.subject} ?: '(no subject)'">Subject</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/messages}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <div class="form-card">
+                <div class="detail-list table-wrap"><table class="table">
+                    <tbody>
+                        <tr><th>From</th><td th:text="${message.name}">Name</td></tr>
+                        <tr><th>Email</th><td><a th:href="${'mailto:' + message.email}" th:text="${message.email}">email</a></td></tr>
+                        <tr><th>Received</th><td th:text="${message.createdAt}">date</td></tr>
+                    </tbody>
+                </table></div>
+                <h3 class="u-mt-3 u-mb-1">Message</h3>
+                <p th:text="${message.message}">Message body</p>
+                <div class="form-actions">
+                    <a class="btn btn-primary" th:href="${'mailto:' + message.email}"><i class="bi bi-reply"></i> Reply by Email</a>
+                    <form th:action="@{/admin/messages/{id}/delete(id=${message.id})}" method="post" class="form-inline">
+                        <button class="btn btn-danger" type="button" data-confirm="Delete this message?" data-confirm-title="Delete message?"><i class="bi bi-trash"></i> Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Hero Slide | SEU Admin', 'Create or edit a hero slide.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('hero')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Hero Slide')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head">
+                <h2 th:text="${slider != null} ? 'Edit Hero Slide' : 'New Hero Slide'">Hero Slide</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/hero-sliders}"><i class="bi bi-arrow-left"></i> Back</a>
+            </div>
+
+            <form class="form-card" th:action="@{/admin/hero-sliders/save}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:if="${slider != null}" th:value="${slider.id}">
+                <div class="form-grid">
+                    <div class="field"><label for="title">Title</label>
+                        <input class="control" id="title" name="title" type="text" th:value="${slider?.title}"></div>
+                    <div class="field"><label for="subtitle">Subtitle</label>
+                        <input class="control" id="subtitle" name="subtitle" type="text" th:value="${slider?.subtitle}"></div>
+                </div>
+                <div class="field"><label for="description">Description</label>
+                    <textarea class="control" id="description" name="description" rows="3" th:text="${slider?.description}"></textarea></div>
+                <div class="form-grid">
+                    <div class="field"><label for="buttonText">Button Text</label>
+                        <input class="control" id="buttonText" name="buttonText" type="text" th:value="${slider?.buttonText}"></div>
+                    <div class="field"><label for="buttonUrl">Button URL</label>
+                        <input class="control" id="buttonUrl" name="buttonUrl" type="text" th:value="${slider?.buttonUrl}"></div>
+                    <div class="field"><label for="displayOrder">Display Order</label>
+                        <input class="control" id="displayOrder" name="displayOrder" type="number" th:value="${slider?.displayOrder}"></div>
+                    <div class="field"><label>&nbsp;</label>
+                        <label class="switch-inline"><input type="checkbox" name="active" value="true" th:checked="${slider == null or slider.active}"> Active</label></div>
+                </div>
+
+                <label class="u-fw-600 u-mb-1 u-block">Background Image</label>
+                <img class="current-image" th:if="${slider != null and slider.backgroundUrl != null}" th:src="${slider.backgroundUrl}" alt="Current background">
+                <input type="hidden" name="currentBackgroundMediaId" th:value="${slider?.backgroundMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('backgroundFile','Upload background (optional)',false)}"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/hero-sliders}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

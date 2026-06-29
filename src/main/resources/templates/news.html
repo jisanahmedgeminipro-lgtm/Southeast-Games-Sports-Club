@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('News | SEU Games & Sports Club', 'Latest news, results and announcements from the SEU Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('news')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">News &amp; Updates</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Stories and announcements from across the club.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('News')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container" th:with="items=${newsPage != null ? newsPage.content : newsList}">
+            <div class="grid grid-3" th:if="${items != null and !#lists.isEmpty(items)}">
+                <article class="card" data-aos="fade-up" th:each="n,i : ${items}" th:attr="data-aos-delay=${i.index % 3 * 80}">
+                    <div class="card__media">
+                        <img th:if="${n.imageUrl != null}" th:src="${n.imageUrl}" th:alt="${n.title}" loading="lazy" decoding="async">
+                        <div th:if="${n.imageUrl == null}" class="fill-block gradient-block--primary"></div>
+                    </div>
+                    <div class="card__body">
+                        <div class="card__meta"><span><i class="bi bi-calendar3"></i> <span th:text="${n.publishDate} ?: ''">Date</span></span></div>
+                        <h3 class="card__title" th:text="${n.title}">News Title</h3>
+                        <p class="u-clamp-3" th:if="${n.content != null}" th:text="${n.content}">Excerpt</p>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${items == null or #lists.isEmpty(items)}"
+                 th:replace="~{fragments/components :: emptyState('bi-newspaper', 'No news published', 'There are no published articles at the moment.', null, null)}"></div>
+
+            <nav th:replace="~{fragments/ui :: pagination(${newsPage}, '/news')}"></nav>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

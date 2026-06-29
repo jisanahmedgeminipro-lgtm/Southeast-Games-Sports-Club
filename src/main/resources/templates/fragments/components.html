@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+  Reusable UI components.
+    breadcrumb(current)                          -> Home / current
+    emptyState(icon,title,message,actionUrl,actionText)
+    skeletonGrid(count)                          -> placeholder loading cards
+    overlays                                     -> confirm modal + toast stack (include once per page)
+    imageUpload(name,label,multiple)             -> drag & drop image upload with preview
+-->
+<body>
+
+<!-- Breadcrumb -->
+<nav th:fragment="breadcrumb(current)" class="crumbs" aria-label="Breadcrumb">
+    <a th:href="@{/}">Home</a>
+    <span class="sep" aria-hidden="true">/</span>
+    <span class="current" aria-current="page" th:text="${current}">Page</span>
+</nav>
+
+<!-- Empty state -->
+<div th:fragment="emptyState(icon, title, message, actionUrl, actionText)" class="empty-state" role="status">
+    <div class="empty-state__icon" aria-hidden="true"><i class="bi" th:classappend="${icon}"></i></div>
+    <h3 th:text="${title}">Nothing here yet</h3>
+    <p th:text="${message}">There is nothing to show right now.</p>
+    <a th:if="${actionUrl != null}" class="btn btn-primary" th:href="${actionUrl}" th:text="${actionText}">Action</a>
+</div>
+
+<!-- Skeleton grid (loading placeholder) -->
+<div th:fragment="skeletonGrid(count)" class="grid grid-3" aria-hidden="true">
+    <div class="skeleton-card" th:each="i : ${#numbers.sequence(1, count)}">
+        <div class="skeleton sk-media"></div>
+        <div class="sk-body">
+            <div class="skeleton skeleton-line sk-40"></div>
+            <div class="skeleton skeleton-line sk-80"></div>
+            <div class="skeleton skeleton-line sk-60"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Skeleton list (loading placeholder) -->
+<div th:fragment="skeletonList(count)" aria-hidden="true">
+    <div class="skeleton skeleton-list-row" th:each="i : ${#numbers.sequence(1, count)}"></div>
+</div>
+
+<!-- Global overlays: confirmation modal + toast stack -->
+<th:block th:fragment="overlays">
+    <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle" aria-hidden="true">
+        <div class="modal__dialog">
+            <div class="modal__icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></div>
+            <h3 class="modal__title" id="confirmModalTitle" data-confirm-title>Are you sure?</h3>
+            <p data-confirm-message>This action cannot be undone.</p>
+            <div class="modal__actions">
+                <button class="btn btn-ghost" type="button" data-confirm-cancel>Cancel</button>
+                <button class="btn btn-danger" type="button" data-confirm-ok>Delete</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast-stack" aria-live="polite" aria-atomic="true"></div>
+</th:block>
+
+<!-- Image upload (drag & drop + preview) -->
+<div th:fragment="imageUpload(name, label, multiple)" class="field" data-dropzone>
+    <label th:text="${label} ?: 'Upload image'" th:for="${name}">Upload image</label>
+    <div class="dropzone" role="button" tabindex="0" aria-label="Upload image">
+        <div class="dropzone__icon" aria-hidden="true"><i class="bi bi-cloud-arrow-up"></i></div>
+        <p class="u-mb-1 u-fw-600">Drag &amp; drop or click to browse</p>
+        <p class="u-xs u-muted">PNG, JPG or WEBP up to 5MB</p>
+        <input type="file" th:id="${name}" th:name="${name}" accept="image/*"
+               th:attr="multiple=${multiple} ? 'multiple' : null">
+        <div class="dropzone__previews" data-dz-previews></div>
+    </div>
+</div>
+
+</body>
+</html>

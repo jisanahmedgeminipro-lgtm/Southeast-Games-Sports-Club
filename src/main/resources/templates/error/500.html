@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Something Went Wrong | SEU Games & Sports Club', 'An unexpected error occurred.')}"></head>
+<body>
+<section class="status-page">
+    <div class="status-page__inner">
+        <p class="status-page__code">500</p>
+        <h1>Something went wrong</h1>
+        <p>An unexpected error occurred on our end. Our team has been notified - please try again in a moment.</p>
+        <div class="status-page__actions">
+            <a class="btn btn-light btn-lg" th:href="@{/}"><i class="bi bi-house"></i> Back to home</a>
+            <a class="btn btn-outline btn-lg" href="#" data-reload><i class="bi bi-arrow-clockwise"></i> Try again</a>
+        </div>
+    </div>
+</section>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

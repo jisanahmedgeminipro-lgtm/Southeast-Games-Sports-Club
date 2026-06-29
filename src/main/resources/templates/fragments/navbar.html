@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--
+  Sticky, glassmorphic top navigation.
+  Usage: <nav th:replace="~{fragments/navbar :: navbar('home')}"></nav>
+  The argument marks the active link (home/about/sports/committee/events/news/gallery/achievements/membership/contact).
+  Reads optional ${clubSettings} for the brand name; falls back to a static label.
+-->
+<body>
+<nav th:fragment="navbar(active)" class="navbar" aria-label="Primary">
+    <div class="container navbar__inner">
+
+        <!-- Brand -->
+        <a class="brand" th:href="@{/}" aria-label="Home">
+            <span class="brand__logo" aria-hidden="true"><i class="bi bi-trophy"></i></span>
+            <span class="brand__name">
+                <span th:text="${clubSettings != null ? clubSettings.clubName : 'Games &amp; Sports Club'}">Games &amp; Sports Club</span>
+                <small>Southeast University</small>
+            </span>
+        </a>
+
+        <!-- Links -->
+        <ul class="nav-links" id="primaryNav">
+            <li><a th:href="@{/}" th:classappend="${active == 'home'} ? 'active'">Home</a></li>
+            <li><a th:href="@{/about}" th:classappend="${active == 'about'} ? 'active'">About</a></li>
+            <li><a th:href="@{/sports}" th:classappend="${active == 'sports'} ? 'active'">Sports</a></li>
+            <li class="has-dropdown" th:classappend="${active == 'committee'} ? 'is-open'">
+                <a href="#" class="dropdown-toggle" aria-haspopup="true">
+                    Committee <i class="bi bi-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a th:href="@{/committee/executive}">Executive Committee</a>
+                    <a th:href="@{/committee/sub-executive}">Sub Executive Committee</a>
+                </div>
+            </li>
+            <li><a th:href="@{/events}" th:classappend="${active == 'events'} ? 'active'">Events</a></li>
+            <li><a th:href="@{/news}" th:classappend="${active == 'news'} ? 'active'">News</a></li>
+            <li><a th:href="@{/gallery}" th:classappend="${active == 'gallery'} ? 'active'">Gallery</a></li>
+            <li><a th:href="@{/achievements}" th:classappend="${active == 'achievements'} ? 'active'">Achievements</a></li>
+            <li><a th:href="@{/contact}" th:classappend="${active == 'contact'} ? 'active'">Contact</a></li>
+        </ul>
+
+        <!-- Actions -->
+        <div class="nav-actions">
+            <button class="icon-btn theme-toggle" data-theme-toggle type="button"
+                    aria-label="Toggle dark mode">
+                <i class="bi bi-moon-stars"></i>
+                <i class="bi bi-sun"></i>
+            </button>
+
+            <!-- Auth-aware actions (rendered when Spring Security is wired) -->
+            <a sec:authorize="isAnonymous()" class="btn btn-primary" th:href="@{/login}">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+            <a sec:authorize="hasRole('STUDENT')" class="btn btn-primary" th:href="@{/student/dashboard}">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" class="btn btn-primary" th:href="@{/admin/dashboard}">
+                <i class="bi bi-speedometer2"></i> Admin
+            </a>
+
+            <button class="icon-btn nav-toggle" type="button" aria-label="Open menu"
+                    aria-controls="primaryNav" aria-expanded="false">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

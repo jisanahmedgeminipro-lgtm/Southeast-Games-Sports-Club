@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Admin Dashboard | SEU Games & Sports Club', 'Administration dashboard for the SEU Games & Sports Club.')}"></head>
+<body>
+<div class="dash">
+
+    <aside class="dash__sidebar">
+        <a class="dash__brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span> SEU Admin</a>
+        <nav class="dash__nav" aria-label="Admin navigation">
+            <a class="active" th:href="@{/admin/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <span class="label">Members</span>
+            <a th:href="@{/admin/students}"><i class="bi bi-people"></i> Students</a>
+            <a th:href="@{/admin/membership}"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a th:href="@{/admin/applications}"><i class="bi bi-inbox"></i> Applications</a>
+            <span class="label">Content</span>
+            <a th:href="@{/admin/sports}"><i class="bi bi-dribbble"></i> Sports</a>
+            <a th:href="@{/admin/events}"><i class="bi bi-calendar-event"></i> Events</a>
+            <a th:href="@{/admin/news}"><i class="bi bi-newspaper"></i> News</a>
+            <a th:href="@{/admin/gallery}"><i class="bi bi-images"></i> Gallery</a>
+            <a th:href="@{/admin/achievements}"><i class="bi bi-award"></i> Achievements</a>
+            <a th:href="@{/admin/committee}"><i class="bi bi-diagram-3"></i> Committee</a>
+            <span class="label">Communication</span>
+            <a th:href="@{/admin/broadcast}"><i class="bi bi-send"></i> Email Broadcast</a>
+            <a th:href="@{/admin/messages}"><i class="bi bi-chat-dots"></i> Messages</a>
+            <span class="label">Site</span>
+            <a th:href="@{/admin/settings/club}"><i class="bi bi-building-gear"></i> Club Settings</a>
+            <a th:href="@{/admin/settings/system}"><i class="bi bi-sliders"></i> System Settings</a>
+            <a th:href="@{/admin/hero-sliders}"><i class="bi bi-card-image"></i> Hero Slider</a>
+            <a th:href="@{/admin/sponsors}"><i class="bi bi-bag-heart"></i> Sponsors</a>
+            <a th:href="@{/admin/faqs}"><i class="bi bi-question-circle"></i> FAQ</a>
+            <a th:href="@{/admin/social-links}"><i class="bi bi-share"></i> Social Links</a>
+            <a th:href="@{/admin/activity-logs}"><i class="bi bi-clock-history"></i> Activity Logs</a>
+        </nav>
+        <div class="dash__sidebar-foot">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline btn-block" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </form>
+        </div>
+    </aside>
+    <div class="dash__overlay"></div>
+
+    <div class="dash__main">
+        <header class="dash__topbar">
+            <div class="u-flex u-items-center u-gap-2">
+                <button class="icon-btn dash__menu-btn" type="button" aria-label="Open menu"><i class="bi bi-list"></i></button>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="dash__topbar-actions">
+                <a class="icon-btn" th:href="@{/}" title="View site" aria-label="View site"><i class="bi bi-box-arrow-up-right"></i></a>
+                <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
+                <div class="dash__user">
+                    <span class="dash__avatar"><i class="bi bi-person-fill-gear"></i></span>
+                    <div>
+                        <strong th:text="${currentUser != null ? currentUser.email : 'Administrator'}">Administrator</strong><br>
+                        <small class="u-muted">Admin</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dash__content">
+            <div class="stat-cards">
+                <div class="stat-card"><div class="stat-card__icon"><i class="bi bi-people"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalStudents : 0}" data-counter="0" th:text="${stats != null ? stats.totalStudents : 0}">0</div><div class="stat-card__label">Total Students</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon amber"><i class="bi bi-calendar-event"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalEvents : 0}" data-counter="0" th:text="${stats != null ? stats.totalEvents : 0}">0</div><div class="stat-card__label">Total Events</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon violet"><i class="bi bi-newspaper"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalNews : 0}" data-counter="0" th:text="${stats != null ? stats.totalNews : 0}">0</div><div class="stat-card__label">Total News</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon rose"><i class="bi bi-images"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalGalleryImages : 0}" data-counter="0" th:text="${stats != null ? stats.totalGalleryImages : 0}">0</div><div class="stat-card__label">Gallery Images</div></div></div>
+            </div>
+
+            <div class="stat-cards">
+                <div class="stat-card"><div class="stat-card__icon"><i class="bi bi-dribbble"></i></div><div><div class="stat-card__num" th:text="${stats != null ? stats.totalSports : 0}">0</div><div class="stat-card__label">Total Sports</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon amber"><i class="bi bi-chat-dots"></i></div><div><div class="stat-card__num" th:text="${stats != null ? stats.totalMessages : 0}">0</div><div class="stat-card__label">Contact Messages</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon violet"><i class="bi bi-card-checklist"></i></div><div><div class="stat-card__num" th:text="${stats != null ? stats.totalApplications : 0}">0</div><div class="stat-card__label">Applications</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon rose"><i class="bi bi-hourglass-split"></i></div><div><div class="stat-card__num" th:text="${stats != null ? stats.pendingApplications : 0}">0</div><div class="stat-card__label">Pending Applications</div></div></div>
+            </div>
+
+            <div class="grid grid-2 u-mt-3 u-align-start">
+                <div class="panel">
+                    <div class="panel__head"><h3>Membership Status</h3>
+                        <span class="badge" th:classappend="${membershipOpen} ? 'badge--green' : 'badge--slate'" th:text="${membershipOpen} ? 'OPEN' : 'CLOSED'">CLOSED</span>
+                    </div>
+                    <div class="panel__body">
+                        <p th:if="${membershipPeriod != null}" th:text="${membershipPeriod.title}">Current drive</p>
+                        <p th:if="${membershipPeriod == null}">No membership drive configured yet.</p>
+                        <div class="u-mt-2 u-flex u-gap-2 u-wrap">
+                            <a class="btn btn-primary" th:href="@{/admin/membership}"><i class="bi bi-toggles"></i> Manage Membership</a>
+                            <a class="btn btn-outline" th:href="@{/admin/applications}">Review Applications</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel__head"><h3>Email Subscribers</h3></div>
+                    <div class="panel__body u-flex u-items-center u-justify-between u-gap-2 u-wrap">
+                        <div>
+                            <div class="stat-card__num num-xl" th:text="${stats != null ? stats.emailSubscribers : 0}">0</div>
+                            <div class="stat-card__label">Registered students reachable by email</div>
+                        </div>
+                        <a class="btn btn-primary" th:href="@{/admin/broadcast}"><i class="bi bi-send"></i> Send Broadcast</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2 u-mt-3 u-align-start">
+                <div class="panel">
+                    <div class="panel__head"><h3>Recent Activities</h3><a class="link-muted" th:href="@{/admin/activity-logs}">View all</a></div>
+                    <div class="panel__body table-wrap">
+                        <table class="table">
+                            <thead><tr><th>Action</th><th>Details</th><th>When</th></tr></thead>
+                            <tbody>
+                                <tr th:each="log : ${recentActivities}">
+                                    <td><span class="badge badge--slate" th:text="${log.action}">ACTION</span></td>
+                                    <td th:text="${log.description}">Description</td>
+                                    <td th:text="${log.createdAt}">time</td>
+                                </tr>
+                                <tr th:if="${recentActivities == null or #lists.isEmpty(recentActivities)}"><td colspan="3" class="u-text-center">No activity yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel__head"><h3>Recent Messages</h3><a class="link-muted" th:href="@{/admin/messages}">View all</a></div>
+                    <div class="panel__body table-wrap">
+                        <table class="table">
+                            <thead><tr><th>From</th><th>Subject</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr th:each="msg : ${recentMessages}">
+                                    <td th:text="${msg.name}">Name</td>
+                                    <td th:text="${msg.subject} ?: '(no subject)'">Subject</td>
+                                    <td><span class="badge" th:classappend="${msg.read} ? 'badge--slate' : 'badge--amber'" th:text="${msg.read} ? 'Read' : 'New'">New</span></td>
+                                </tr>
+                                <tr th:if="${recentMessages == null or #lists.isEmpty(recentMessages)}"><td colspan="3" class="u-text-center">No messages yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

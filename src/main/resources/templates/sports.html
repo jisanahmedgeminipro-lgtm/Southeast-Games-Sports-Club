@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Sports | SEU Games & Sports Club', 'Explore the sports disciplines offered by the SEU Games & Sports Club and their training schedules.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('sports')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Sports We Champion</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Find your discipline and represent Southeast University.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Sports')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="grid grid-4" th:if="${sportsList != null and !#lists.isEmpty(sportsList)}">
+                <article class="card" data-aos="zoom-in" th:each="sport,i : ${sportsList}" th:attr="data-aos-delay=${i.index * 60}">
+                    <div class="card__media aspect-34">
+                        <img th:if="${sport.imageUrl != null}" th:src="${sport.imageUrl}" th:alt="${sport.name}" loading="lazy" decoding="async">
+                        <div th:if="${sport.imageUrl == null}" class="media-fallback"><i class="bi bi-dribbble"></i></div>
+                    </div>
+                    <div class="card__body">
+                        <h3 class="card__title" th:text="${sport.name}">Sport</h3>
+                        <p class="u-sm u-clamp-2" th:if="${sport.description != null}" th:text="${sport.description}">Description</p>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${sportsList == null or #lists.isEmpty(sportsList)}"
+                 th:replace="~{fragments/components :: emptyState('bi-dribbble', 'No sports listed', 'Sports disciplines will be listed here soon.', null, null)}"></div>
+        </div>
+    </section>
+
+    <section class="section section--alt" th:if="${trainingSchedules != null and !#lists.isEmpty(trainingSchedules)}">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Weekly</span><h2>Training Schedule</h2></div>
+            <div class="schedule">
+                <div class="schedule__row" data-aos="fade-up" th:each="t : ${trainingSchedules}">
+                    <span class="schedule__day" th:text="${t.dayOfWeek}">Monday</span>
+                    <span th:text="${t.sport != null ? t.sport.name : ''}">Sport</span>
+                    <span class="schedule__time"><span th:text="${t.startTime}">5:00</span> - <span th:text="${t.endTime}">7:00</span></span>
+                    <span th:text="${t.venue}">Venue</span>
+                    <span th:if="${t.coachName != null}"><i class="bi bi-person-badge"></i> <span th:text="${t.coachName}">Coach</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

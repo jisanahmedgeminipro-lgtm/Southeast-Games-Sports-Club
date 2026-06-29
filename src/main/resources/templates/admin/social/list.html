@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Social Links | SEU Admin', 'Manage social media links.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('social')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Social Links')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Social Links</h2>
+                <div class="admin-head__actions"><a class="btn btn-primary" th:href="@{/admin/social-links/new}"><i class="bi bi-plus-lg"></i> Add Link</a></div></div>
+
+            <div class="dt dt--responsive" id="socialTable" data-enhanced-table data-page-size="10"
+                 data-export-name="social-links" data-bulk-action="/admin/social-links/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search..."></div>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar><span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button></div>
+                <div class="table-wrap"><table class="table">
+                    <thead><tr><th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                        <th data-sort>Platform</th><th data-sort>URL</th><th data-sort>Icon</th>
+                        <th data-sort>Order</th><th data-sort>Active</th><th data-dt-skip>Actions</th></tr></thead>
+                    <tbody>
+                        <tr th:each="l : ${links}">
+                            <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${l.id}"></td>
+                            <td data-label="Platform" th:text="${l.platform}">FACEBOOK</td>
+                            <td data-label="URL" th:text="${l.url}">https://...</td>
+                            <td data-label="Icon"><i class="bi" th:classappend="${l.iconClass}"></i> <span th:text="${l.iconClass}"></span></td>
+                            <td data-label="Order" th:text="${l.displayOrder}">0</td>
+                            <td data-label="Active"><span class="badge" th:classappend="${l.active} ? 'badge--green' : 'badge--slate'" th:text="${l.active} ? 'Yes' : 'No'">Yes</span></td>
+                            <td data-label="Actions" data-dt-skip><div class="row-actions">
+                                <a class="icon-btn" th:href="@{/admin/social-links/{id}/edit(id=${l.id})}"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{/admin/social-links/{id}/delete(id=${l.id})}" method="post" class="form-inline">
+                                    <button class="icon-btn" type="button" data-confirm="Delete this link?" data-confirm-title="Delete link?"><i class="bi bi-trash"></i></button>
+                                </form></div></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(links)}"><td colspan="7">
+                            <div th:replace="~{fragments/components :: emptyState('bi-share','No links yet','Add your social media links.','/admin/social-links/new','Add Link')}"></div></td></tr>
+                    </tbody>
+                </table></div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

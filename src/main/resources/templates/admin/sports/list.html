@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Sports | SEU Admin', 'Manage sports.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('sports')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Sports')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head">
+                <h2>Sports</h2>
+                <div class="admin-head__actions"><a class="btn btn-primary" th:href="@{/admin/sports/new}"><i class="bi bi-plus-lg"></i> Add Sport</a></div>
+            </div>
+
+            <div class="dt dt--responsive" id="sportsTable" data-enhanced-table data-page-size="10"
+                 data-export-name="sports" data-bulk-action="/admin/sports/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search sports..."></div>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar>
+                    <span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead><tr>
+                            <th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                            <th data-dt-skip>Image</th><th data-sort>Name</th><th data-sort>Slug</th>
+                            <th data-sort>Order</th><th data-sort>Active</th><th data-dt-skip>Actions</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr th:each="s : ${sports}">
+                                <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${s.id}"></td>
+                                <td data-dt-skip>
+                                    <img class="img-thumb" th:if="${s.imageUrl != null}" th:src="${s.imageUrl}" alt="">
+                                    <span class="img-thumb" th:unless="${s.imageUrl != null}"></span>
+                                </td>
+                                <td data-label="Name" th:text="${s.name}">Football</td>
+                                <td data-label="Slug" th:text="${s.slug}">football</td>
+                                <td data-label="Order" th:text="${s.displayOrder}">1</td>
+                                <td data-label="Active"><span class="badge" th:classappend="${s.active} ? 'badge--green' : 'badge--slate'" th:text="${s.active} ? 'Yes' : 'No'">Yes</span></td>
+                                <td data-label="Actions" data-dt-skip>
+                                    <div class="row-actions">
+                                        <a class="icon-btn" th:href="@{/admin/sports/{id}/edit(id=${s.id})}" aria-label="Edit"><i class="bi bi-pencil"></i></a>
+                                        <form th:action="@{/admin/sports/{id}/delete(id=${s.id})}" method="post" class="form-inline">
+                                            <button class="icon-btn" type="button" data-confirm="Delete this sport?" data-confirm-title="Delete sport?"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(sports)}"><td colspan="7">
+                                <div th:replace="~{fragments/components :: emptyState('bi-dribbble','No sports yet','Add the sports your club offers.','/admin/sports/new','Add Sport')}"></div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

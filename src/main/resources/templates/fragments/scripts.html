@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+  Shared script bundle. Place just before </body>:
+    <th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+  Loads GSAP, AOS and Swiper from CDN, then the app's main.js.
+-->
+<body>
+<th:block th:fragment="scripts">
+    <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script defer th:src="@{/js/main.js}"></script>
+</th:block>
+</body>
+</html>

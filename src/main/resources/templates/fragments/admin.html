@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+  Admin shell fragments.
+    sidebar(active) -> admin navigation with active highlighting
+    topbar(title)   -> sticky top bar with menu toggle, theme switch, user
+-->
+<body>
+
+<aside th:fragment="sidebar(active)" class="dash__sidebar">
+    <a class="dash__brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span> SEU Admin</a>
+    <nav class="dash__nav" aria-label="Admin navigation">
+        <a th:href="@{/admin/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+        <span class="label">Members</span>
+        <a th:href="@{/admin/students}" th:classappend="${active == 'students'} ? 'active'"><i class="bi bi-people"></i> Students</a>
+        <a th:href="@{/admin/membership}" th:classappend="${active == 'membership'} ? 'active'"><i class="bi bi-card-checklist"></i> Membership</a>
+        <a th:href="@{/admin/applications}" th:classappend="${active == 'applications'} ? 'active'"><i class="bi bi-inbox"></i> Applications</a>
+        <span class="label">Content</span>
+        <a th:href="@{/admin/sports}" th:classappend="${active == 'sports'} ? 'active'"><i class="bi bi-dribbble"></i> Sports</a>
+        <a th:href="@{/admin/events}" th:classappend="${active == 'events'} ? 'active'"><i class="bi bi-calendar-event"></i> Events</a>
+        <a th:href="@{/admin/news}" th:classappend="${active == 'news'} ? 'active'"><i class="bi bi-newspaper"></i> News</a>
+        <a th:href="@{/admin/gallery}" th:classappend="${active == 'gallery'} ? 'active'"><i class="bi bi-images"></i> Gallery</a>
+        <a th:href="@{/admin/achievements}" th:classappend="${active == 'achievements'} ? 'active'"><i class="bi bi-award"></i> Achievements</a>
+        <a th:href="@{/admin/committee}" th:classappend="${active == 'committee'} ? 'active'"><i class="bi bi-diagram-3"></i> Committee</a>
+        <span class="label">Communication</span>
+        <a th:href="@{/admin/broadcast}" th:classappend="${active == 'broadcast'} ? 'active'"><i class="bi bi-send"></i> Email Broadcast</a>
+        <a th:href="@{/admin/messages}" th:classappend="${active == 'messages'} ? 'active'"><i class="bi bi-chat-dots"></i> Messages</a>
+        <span class="label">Site</span>
+        <a th:href="@{/admin/settings/club}" th:classappend="${active == 'club'} ? 'active'"><i class="bi bi-building-gear"></i> Club Settings</a>
+        <a th:href="@{/admin/settings/system}" th:classappend="${active == 'system'} ? 'active'"><i class="bi bi-sliders"></i> System Settings</a>
+        <a th:href="@{/admin/hero-sliders}" th:classappend="${active == 'hero'} ? 'active'"><i class="bi bi-card-image"></i> Hero Slider</a>
+        <a th:href="@{/admin/sponsors}" th:classappend="${active == 'sponsors'} ? 'active'"><i class="bi bi-bag-heart"></i> Sponsors</a>
+        <a th:href="@{/admin/faqs}" th:classappend="${active == 'faqs'} ? 'active'"><i class="bi bi-question-circle"></i> FAQ</a>
+        <a th:href="@{/admin/social-links}" th:classappend="${active == 'social'} ? 'active'"><i class="bi bi-share"></i> Social Links</a>
+        <a th:href="@{/admin/activity-logs}" th:classappend="${active == 'logs'} ? 'active'"><i class="bi bi-clock-history"></i> Activity Logs</a>
+    </nav>
+    <div class="dash__sidebar-foot">
+        <form th:action="@{/logout}" method="post">
+            <button class="btn btn-outline btn-block" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </form>
+    </div>
+</aside>
+
+<header th:fragment="topbar(title)" class="dash__topbar">
+    <div class="u-flex u-items-center u-gap-2">
+        <button class="icon-btn dash__menu-btn" type="button" aria-label="Open menu"><i class="bi bi-list"></i></button>
+        <h1 th:text="${title}">Admin</h1>
+    </div>
+    <div class="dash__topbar-actions">
+        <a class="icon-btn" th:href="@{/}" title="View site" aria-label="View site"><i class="bi bi-box-arrow-up-right"></i></a>
+        <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
+        <div class="dash__user">
+            <span class="dash__avatar"><i class="bi bi-person-fill-gear"></i></span>
+        </div>
+    </div>
+</header>
+
+<!-- Flash messages surfaced as toasts (main.js reads .js-flash) -->
+<th:block th:fragment="flash">
+    <div class="js-flash" th:if="${successMessage}" data-type="success" th:attr="data-message=${successMessage}"></div>
+    <div class="js-flash" th:if="${errorMessage}" data-type="error" th:attr="data-message=${errorMessage}"></div>
+</th:block>
+
+</body>
+</html>

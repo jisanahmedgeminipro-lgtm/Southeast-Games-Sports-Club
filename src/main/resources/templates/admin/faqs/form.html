@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('FAQ | SEU Admin', 'Create or edit an FAQ.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('faqs')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('FAQ')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${faq != null} ? 'Edit FAQ' : 'New FAQ'">FAQ</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/faqs}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/faqs/save}" method="post">
+                <input type="hidden" name="id" th:if="${faq != null}" th:value="${faq.id}">
+                <div class="field"><label for="question">Question</label>
+                    <input class="control" id="question" name="question" type="text" required th:value="${faq?.question}"></div>
+                <div class="field"><label for="answer">Answer</label>
+                    <textarea class="control" id="answer" name="answer" rows="4" required th:text="${faq?.answer}"></textarea></div>
+                <div class="form-grid">
+                    <div class="field"><label for="displayOrder">Display Order</label>
+                        <input class="control" id="displayOrder" name="displayOrder" type="number" th:value="${faq?.displayOrder}"></div>
+                    <div class="field"><label>&nbsp;</label>
+                        <label class="switch-inline"><input type="checkbox" name="active" value="true" th:checked="${faq == null or faq.active}"> Active</label></div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/faqs}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

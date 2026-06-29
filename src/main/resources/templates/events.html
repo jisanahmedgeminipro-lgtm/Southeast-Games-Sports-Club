@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Events | SEU Games & Sports Club', 'Upcoming and past events, tournaments and ceremonies of the SEU Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('events')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Events</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Tournaments, trials and celebrations throughout the year.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Events')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container" th:with="items=${eventsPage != null ? eventsPage.content : events}">
+            <div class="grid grid-3" th:if="${items != null and !#lists.isEmpty(items)}">
+                <article class="card" data-aos="fade-up" th:each="ev,i : ${items}" th:attr="data-aos-delay=${i.index % 3 * 80}">
+                    <div class="card__media">
+                        <img th:if="${ev.bannerUrl != null}" th:src="${ev.bannerUrl}" th:alt="${ev.title}" loading="lazy" decoding="async">
+                        <div th:if="${ev.bannerUrl == null}" class="fill-block gradient-block"></div>
+                        <span class="chip chip-abs" th:text="${ev.status}">UPCOMING</span>
+                    </div>
+                    <div class="card__body">
+                        <div class="card__meta">
+                            <span><i class="bi bi-calendar-event"></i> <span th:text="${ev.eventDate} ?: 'TBA'">Date</span></span>
+                            <span th:if="${ev.eventTime != null}"><i class="bi bi-clock"></i> <span th:text="${ev.eventTime}">Time</span></span>
+                            <span th:if="${ev.venue != null}"><i class="bi bi-geo-alt"></i> <span th:text="${ev.venue}">Venue</span></span>
+                        </div>
+                        <h3 class="card__title" th:text="${ev.title}">Event Title</h3>
+                        <p class="u-clamp-3" th:text="${ev.description}">Description</p>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${items == null or #lists.isEmpty(items)}"
+                 th:replace="~{fragments/components :: emptyState('bi-calendar-x', 'No events to show', 'There are no events scheduled right now. Please check back soon.', null, null)}"></div>
+
+            <nav th:replace="~{fragments/ui :: pagination(${eventsPage}, '/events')}"></nav>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

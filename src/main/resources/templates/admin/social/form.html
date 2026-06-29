@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Social Link | SEU Admin', 'Create or edit a social link.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('social')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Social Link')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${link != null} ? 'Edit Link' : 'New Link'">Link</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/social-links}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/social-links/save}" method="post">
+                <input type="hidden" name="id" th:if="${link != null}" th:value="${link.id}">
+                <div class="form-grid">
+                    <div class="field"><label for="platform">Platform</label>
+                        <input class="control" id="platform" name="platform" type="text" required placeholder="FACEBOOK" th:value="${link?.platform}"></div>
+                    <div class="field"><label for="iconClass">Icon Class</label>
+                        <input class="control" id="iconClass" name="iconClass" type="text" placeholder="bi-facebook" th:value="${link?.iconClass}"></div>
+                    <div class="field"><label for="url">URL</label>
+                        <input class="control" id="url" name="url" type="url" required th:value="${link?.url}"></div>
+                    <div class="field"><label for="displayOrder">Display Order</label>
+                        <input class="control" id="displayOrder" name="displayOrder" type="number" th:value="${link?.displayOrder}"></div>
+                    <div class="field"><label>&nbsp;</label>
+                        <label class="switch-inline"><input type="checkbox" name="active" value="true" th:checked="${link == null or link.active}"> Active</label></div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/social-links}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

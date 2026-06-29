@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Club Settings | SEU Admin', 'Manage club identity and contact details.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('club')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Club Settings')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+
+            <div class="admin-head">
+                <h2>Club Settings</h2>
+            </div>
+
+            <form class="form-card" th:action="@{/admin/settings/club}" method="post" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <div class="field"><label for="universityName">University Name</label>
+                        <input class="control" id="universityName" name="universityName" type="text" required th:value="${settings.universityName}"></div>
+                    <div class="field"><label for="clubName">Club Name</label>
+                        <input class="control" id="clubName" name="clubName" type="text" required th:value="${settings.clubName}"></div>
+                    <div class="field"><label for="establishedYear">Established Year</label>
+                        <input class="control" id="establishedYear" name="establishedYear" type="number" min="1900" max="2100" th:value="${settings.establishedYear}"></div>
+                    <div class="field"><label for="motto">Motto</label>
+                        <input class="control" id="motto" name="motto" type="text" th:value="${settings.motto}"></div>
+                </div>
+                <div class="field"><label for="aboutClub">About the Club</label>
+                    <textarea class="control" id="aboutClub" name="aboutClub" rows="4" th:text="${settings.aboutClub}"></textarea></div>
+                <div class="form-grid">
+                    <div class="field"><label for="address">Address</label>
+                        <input class="control" id="address" name="address" type="text" th:value="${settings.address}"></div>
+                    <div class="field"><label for="phone">Phone</label>
+                        <input class="control" id="phone" name="phone" type="text" th:value="${settings.phone}"></div>
+                    <div class="field"><label for="email">Email</label>
+                        <input class="control" id="email" name="email" type="email" th:value="${settings.email}"></div>
+                    <div class="field"><label for="googleMapLink">Google Map Link</label>
+                        <input class="control" id="googleMapLink" name="googleMapLink" type="url" th:value="${settings.googleMapLink}"></div>
+                </div>
+
+                <label class="u-fw-600 u-mb-1 u-block">Club Logo</label>
+                <img class="current-image" th:if="${settings.logoUrl != null}" th:src="${settings.logoUrl}" alt="Current logo">
+                <input type="hidden" name="currentLogoMediaId" th:value="${settings.logoMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('logoFile','Upload new logo (optional)',false)}"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save Settings</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

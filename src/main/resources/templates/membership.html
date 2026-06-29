@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Membership | SEU Games & Sports Club', 'Membership information for the Southeast University Games & Sports Club - how and when to join.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('membership')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Membership</h1>
+            <p data-aos="fade-up" data-aos-delay="100">Join the SEU Games &amp; Sports Club family.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Membership')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="notice-banner" data-aos="zoom-in">
+                <span class="chip" th:if="${membershipOpen}"><span class="pulse-dot"></span> Membership Open</span>
+                <span class="chip chip--accent" th:unless="${membershipOpen}"><span class="pulse-dot"></span> Currently Closed</span>
+                <h2 class="u-mt-2" th:text="${membershipOpen} ? 'Applications Are Open' : 'Membership is currently closed'">Status</h2>
+                <p class="u-max-720 u-mx-auto u-mt-2" th:if="${membershipPeriod != null and membershipPeriod.announcement != null}" th:text="${membershipPeriod.announcement}">Announcement</p>
+                <p class="u-max-720 u-mx-auto u-mt-2" th:if="${membershipPeriod == null or membershipPeriod.announcement == null}">
+                    Membership is currently closed. Opening dates will be announced here. Register an account so we can email you the moment applications open.
+                </p>
+                <div class="u-mt-3 u-flex u-justify-center u-wrap u-gap-3 u-muted" th:if="${membershipPeriod != null}">
+                    <span th:if="${membershipPeriod.openingDate != null}"><i class="bi bi-calendar-check"></i> Opens: <strong th:text="${membershipPeriod.openingDate}"></strong></span>
+                    <span th:if="${membershipPeriod.closingDate != null}"><i class="bi bi-calendar-x"></i> Closes: <strong th:text="${membershipPeriod.closingDate}"></strong></span>
+                </div>
+                <div class="u-mt-4">
+                    <a th:if="${membershipOpen}" class="btn btn-primary btn-lg" th:href="@{/student/dashboard}"><i class="bi bi-pencil-square"></i> Apply Now</a>
+                    <a th:unless="${membershipOpen}" class="btn btn-primary btn-lg" th:href="@{/register}"><i class="bi bi-bell"></i> Register to Get Notified</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section--alt">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">How it works</span><h2>Joining in 4 Steps</h2></div>
+            <div class="grid grid-4">
+                <div class="card card-pad-sm" data-aos="fade-up"><div class="step-num">1</div><h3 class="card__title">Register</h3><p class="u-sm">Create an account with your official <strong>@seu.edu.bd</strong> email.</p></div>
+                <div class="card card-pad-sm" data-aos="fade-up" data-aos-delay="100"><div class="step-num">2</div><h3 class="card__title">Verify</h3><p class="u-sm">Confirm your email with the one-time code we send you.</p></div>
+                <div class="card card-pad-sm" data-aos="fade-up" data-aos-delay="200"><div class="step-num">3</div><h3 class="card__title">Apply</h3><p class="u-sm">When membership opens, submit your application from your dashboard.</p></div>
+                <div class="card card-pad-sm" data-aos="fade-up" data-aos-delay="300"><div class="step-num">4</div><h3 class="card__title">Play</h3><p class="u-sm">Get approved and start representing Southeast University.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" th:if="${faqs != null and !#lists.isEmpty(faqs)}">
+        <div class="container u-max-820">
+            <div class="section-head"><span class="eyebrow">Questions</span><h2>Frequently Asked</h2></div>
+            <details class="card card-pad-sm u-mb-1" th:each="faq : ${faqs}">
+                <summary th:text="${faq.question}">Question</summary>
+                <p class="u-mt-2" th:text="${faq.answer}">Answer</p>
+            </details>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

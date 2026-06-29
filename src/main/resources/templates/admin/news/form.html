@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('News Article | SEU Admin', 'Create or edit a news article.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('news')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('News Article')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${news != null} ? 'Edit Article' : 'New Article'">Article</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/news}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/news/save}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:if="${news != null}" th:value="${news.id}">
+                <div class="field"><label for="title">Title</label>
+                    <input class="control" id="title" name="title" type="text" required th:value="${news?.title}"></div>
+                <div class="field"><label for="content">Content</label>
+                    <textarea class="control" id="content" name="content" rows="8" required th:text="${news?.content}"></textarea></div>
+                <div class="form-grid">
+                    <div class="field"><label for="publishDate">Publish Date</label>
+                        <input class="control" id="publishDate" name="publishDate" type="date" th:value="${news?.publishDate}"></div>
+                    <div class="field"><label for="status">Status</label>
+                        <select class="control" id="status" name="status">
+                            <option value="DRAFT" th:selected="${news == null or news.status == 'DRAFT'}">Draft</option>
+                            <option value="PUBLISHED" th:selected="${news != null and news.status == 'PUBLISHED'}">Published</option>
+                        </select></div>
+                </div>
+
+                <label class="u-fw-600 u-mb-1 u-block">Featured Image</label>
+                <img class="current-image" th:if="${news != null and news.imageUrl != null}" th:src="${news.imageUrl}" alt="Image">
+                <input type="hidden" name="currentImageMediaId" th:value="${news?.imageMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('imageFile','Upload image (optional)',false)}"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/news}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

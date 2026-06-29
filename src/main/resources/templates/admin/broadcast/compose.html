@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Email Broadcast | SEU Admin', 'Send an email broadcast and view history.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('broadcast')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Email Broadcast')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Compose Broadcast</h2></div>
+
+            <form class="form-card u-mb-3" th:action="@{/admin/broadcast/send}" method="post">
+                <div class="field"><label for="subject">Subject</label>
+                    <input class="control" id="subject" name="subject" type="text" required></div>
+                <div class="field"><label for="body">Message (HTML allowed)</label>
+                    <textarea class="control" id="body" name="body" rows="7" required></textarea></div>
+                <div class="field"><label for="targetType">Send To</label>
+                    <select class="control" id="targetType" name="targetType" required>
+                        <option value="ALL_STUDENTS">All Students</option>
+                        <option value="MEMBERS_ONLY">Members Only (approved)</option>
+                        <option value="SELECTED">Selected Students</option>
+                    </select></div>
+                <div class="field"><label for="recipientUserIds">Selected Recipients (used only for "Selected Students")</label>
+                    <select class="control" id="recipientUserIds" name="recipientUserIds" multiple size="6">
+                        <option th:each="s : ${students}" th:value="${s.userId}"
+                                th:text="${s.fullName + ' — ' + s.email}">Student</option>
+                    </select>
+                    <span class="hint">Hold Ctrl/Cmd to select multiple students.</span></div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"
+                            data-confirm="Send this email broadcast now?" data-confirm-title="Send broadcast?" data-confirm-ok-text="Send"><i class="bi bi-send"></i> Send Broadcast</button>
+                </div>
+            </form>
+
+            <div class="panel">
+                <div class="panel__head"><h3>Broadcast History</h3></div>
+                <div class="panel__body table-wrap">
+                    <table class="table">
+                        <thead><tr><th>Subject</th><th>Target</th><th>Recipients</th><th>Status</th><th>Sent</th></tr></thead>
+                        <tbody>
+                            <tr th:each="b : ${history}">
+                                <td th:text="${b.subject}">Subject</td>
+                                <td th:text="${b.targetType}">ALL_STUDENTS</td>
+                                <td th:text="${b.recipientCount}">0</td>
+                                <td><span class="badge" th:classappend="${b.status == 'SENT'} ? 'badge--green' : 'badge--amber'" th:text="${b.status}">SENT</span></td>
+                                <td th:text="${b.sentAt}">—</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(history)}"><td colspan="5" class="u-text-center">No broadcasts sent yet.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

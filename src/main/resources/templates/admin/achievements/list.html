@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Achievements | SEU Admin', 'Manage achievements.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('achievements')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Achievements')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Achievements</h2>
+                <div class="admin-head__actions"><a class="btn btn-primary" th:href="@{/admin/achievements/new}"><i class="bi bi-plus-lg"></i> Add Achievement</a></div></div>
+
+            <div class="dt dt--responsive" id="achTable" data-enhanced-table data-page-size="10"
+                 data-export-name="achievements" data-bulk-action="/admin/achievements/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search achievements..."></div>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar><span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button></div>
+                <div class="table-wrap"><table class="table">
+                    <thead><tr><th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                        <th data-dt-skip>Image</th><th data-sort>Title</th><th data-sort>Year</th>
+                        <th data-sort>Sport</th><th data-sort>Order</th><th data-dt-skip>Actions</th></tr></thead>
+                    <tbody>
+                        <tr th:each="a : ${achievements}">
+                            <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${a.id}"></td>
+                            <td data-dt-skip><img class="img-thumb" th:if="${a.imageUrl != null}" th:src="${a.imageUrl}" alt=""><span class="img-thumb" th:unless="${a.imageUrl != null}"></span></td>
+                            <td data-label="Title" th:text="${a.title}">Title</td>
+                            <td data-label="Year" th:text="${a.achievementYear}">2026</td>
+                            <td data-label="Sport" th:text="${a.sportName}">—</td>
+                            <td data-label="Order" th:text="${a.displayOrder}">0</td>
+                            <td data-label="Actions" data-dt-skip><div class="row-actions">
+                                <a class="icon-btn" th:href="@{/admin/achievements/{id}/edit(id=${a.id})}"><i class="bi bi-pencil"></i></a>
+                                <form th:action="@{/admin/achievements/{id}/delete(id=${a.id})}" method="post" class="form-inline">
+                                    <button class="icon-btn" type="button" data-confirm="Delete this achievement?" data-confirm-title="Delete achievement?"><i class="bi bi-trash"></i></button>
+                                </form></div></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(achievements)}"><td colspan="7">
+                            <div th:replace="~{fragments/components :: emptyState('bi-trophy','No achievements yet','Record your club trophies and titles.','/admin/achievements/new','Add Achievement')}"></div></td></tr>
+                    </tbody>
+                </table></div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

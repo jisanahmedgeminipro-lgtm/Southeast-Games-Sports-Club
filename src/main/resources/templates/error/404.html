@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Page Not Found | SEU Games & Sports Club', 'The page you are looking for could not be found.')}"></head>
+<body>
+<section class="status-page">
+    <div class="status-page__inner">
+        <p class="status-page__code">404</p>
+        <h1>Page not found</h1>
+        <p>The page you're looking for doesn't exist or may have been moved. Let's get you back on track.</p>
+        <div class="status-page__actions">
+            <a class="btn btn-light btn-lg" th:href="@{/}"><i class="bi bi-house"></i> Back to home</a>
+            <a class="btn btn-outline btn-lg" th:href="@{/contact}">Contact us</a>
+        </div>
+    </div>
+</section>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

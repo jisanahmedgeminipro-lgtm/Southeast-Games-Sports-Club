@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Sponsor | SEU Admin', 'Create or edit a sponsor.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('sponsors')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Sponsor')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${sponsor != null} ? 'Edit Sponsor' : 'New Sponsor'">Sponsor</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/sponsors}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/sponsors/save}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:if="${sponsor != null}" th:value="${sponsor.id}">
+                <div class="form-grid">
+                    <div class="field"><label for="name">Name</label>
+                        <input class="control" id="name" name="name" type="text" required th:value="${sponsor?.name}"></div>
+                    <div class="field"><label for="website">Website</label>
+                        <input class="control" id="website" name="website" type="url" th:value="${sponsor?.website}"></div>
+                    <div class="field"><label for="displayOrder">Display Order</label>
+                        <input class="control" id="displayOrder" name="displayOrder" type="number" th:value="${sponsor?.displayOrder}"></div>
+                    <div class="field"><label>&nbsp;</label>
+                        <label class="switch-inline"><input type="checkbox" name="active" value="true" th:checked="${sponsor == null or sponsor.active}"> Active</label></div>
+                </div>
+                <label class="u-fw-600 u-mb-1 u-block">Logo</label>
+                <img class="current-image" th:if="${sponsor != null and sponsor.logoUrl != null}" th:src="${sponsor.logoUrl}" alt="Logo">
+                <input type="hidden" name="currentLogoMediaId" th:value="${sponsor?.logoMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('logoFile','Upload logo (optional)',false)}"></div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/sponsors}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

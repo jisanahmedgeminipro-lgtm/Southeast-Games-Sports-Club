@@ -1,0 +1,52 @@
+# =========================
+#  Maven
+# =========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# =========================
+#  Build / runtime output
+# =========================
+*.log
+logs/
+*.class
+
+# =========================
+#  Uploaded media (runtime, not source-controlled)
+# =========================
+uploads/
+
+# =========================
+#  Environment / secrets
+# =========================
+.env
+.env.local
+*.local.properties
+application-local.properties
+
+# =========================
+#  IDEs
+# =========================
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.project
+.classpath
+.settings/
+.factorypath
+nbproject/
+.apt_generated/
+
+# =========================
+#  OS files
+# =========================
+.DS_Store
+Thumbs.db

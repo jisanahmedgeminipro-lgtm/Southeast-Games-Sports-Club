@@ -1,0 +1,21 @@
+{
+  "name": "Southeast University Games & Sports Club",
+  "short_name": "SEU Sports",
+  "description": "Official app of the Southeast University Games & Sports Club - sports, events, news, committees and membership.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a141b",
+  "theme_color": "#0f766e",
+  "categories": ["sports", "education"],
+  "icons": [
+    {
+      "src": "/images/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

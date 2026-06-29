@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Southeast University Games & Sports Club', 'The official home of the Southeast University Games & Sports Club - sports, events, news, committees, achievements and membership.')}"></head>
+<body>
+
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('home')}"></nav>
+
+<main id="top">
+
+    <!-- ===================== HERO ===================== -->
+    <header class="hero" th:classappend="${heroSliders == null or #lists.isEmpty(heroSliders)} ? 'hero--fallback'">
+        <div th:if="${heroSliders != null and !#lists.isEmpty(heroSliders)}" class="swiper hero__swiper" data-swiper="hero">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide hero__slide" th:each="slide : ${heroSliders}">
+                    <div class="hero__bg" th:if="${slide.backgroundUrl != null}">
+                        <img th:src="${slide.backgroundUrl}" th:alt="${slide.title}" decoding="async">
+                    </div>
+                    <div class="container hero__content">
+                        <span class="hero__eyebrow" th:if="${slide.subtitle != null}" th:text="${slide.subtitle}">Welcome</span>
+                        <h1 th:text="${slide.title}">Where Passion Meets Performance</h1>
+                        <p class="hero__lead" th:text="${slide.description}">Join a community of athletes and dreamers.</p>
+                        <div class="hero__cta" th:if="${slide.buttonText != null}">
+                            <a class="btn btn-primary btn-lg" th:href="${slide.buttonUrl} ?: '#about'" th:text="${slide.buttonText}">Discover</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <div th:if="${heroSliders == null or #lists.isEmpty(heroSliders)}" class="container hero__content">
+            <span class="hero__eyebrow" data-gsap-hero>Southeast University</span>
+            <h1 data-gsap-hero>Where Passion <span class="text-gradient">Meets Performance</span></h1>
+            <p class="hero__lead" data-gsap-hero>
+                The official home of the SEU Games &amp; Sports Club. Compete, connect and celebrate
+                the spirit of sportsmanship across seven disciplines and beyond.
+            </p>
+            <div class="hero__cta" data-gsap-hero>
+                <a class="btn btn-primary btn-lg" th:href="@{/membership}"><i class="bi bi-people"></i> Become a Member</a>
+                <a class="btn btn-light btn-lg" th:href="@{/sports}">Explore Sports</a>
+            </div>
+        </div>
+
+        <a class="hero__scroll" th:href="@{/#about}" aria-label="Scroll to content"><span class="mouse"></span> Scroll</a>
+    </header>
+
+    <!-- ===================== STATS ===================== -->
+    <section class="section section--alt" aria-label="Club at a glance">
+        <div class="container">
+            <div class="stats">
+                <div class="stat glass" data-aos="fade-up">
+                    <div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalStudents : 2500}" data-counter="2500">0</span></div>
+                    <div class="stat__label">Active Members</div>
+                </div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat__num text-gradient"><span th:attr="data-counter=${stats != null ? stats.totalSports : 7}" data-counter="7">0</span></div>
+                    <div class="stat__label">Sports Disciplines</div>
+                </div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalEvents : 120}" data-counter="120">0</span></div>
+                    <div class="stat__label">Events Hosted</div>
+                </div>
+                <div class="stat glass" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stat__num text-gradient"><span data-suffix="+" th:attr="data-counter=${stats != null ? stats.totalAchievements : 45}" data-counter="45">0</span></div>
+                    <div class="stat__label">Trophies Won</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section class="section" id="about">
+        <div class="container grid grid-2 u-items-center u-gap-wide">
+            <div data-aos="fade-right">
+                <span class="eyebrow u-mb-2">About the Club</span>
+                <h2 th:text="${clubSettings != null ? clubSettings.clubName : 'A Legacy of Sporting Excellence'}">A Legacy of Sporting Excellence</h2>
+                <p th:text="${clubSettings != null and clubSettings.aboutClub != null ? clubSettings.aboutClub :
+                    'The Southeast University Games & Sports Club nurtures talent, builds character and fosters teamwork. From the football pitch to the chessboard, we champion every athlete on their journey.'}">About the club...</p>
+                <ul class="list-checks u-mt-3">
+                    <li><i class="bi bi-check-circle-fill"></i> Inclusive, student-led community</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Professional coaching &amp; facilities</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Inter-university tournaments</li>
+                </ul>
+                <a class="btn btn-outline u-mt-3" th:href="@{/about}">Learn more <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div data-aos="fade-left" class="card aspect-43">
+                <div class="card__media fill-block">
+                    <img th:if="${clubSettings != null and clubSettings.logoUrl != null}" th:src="${clubSettings.logoUrl}" alt="Club" loading="lazy" decoding="async">
+                    <div th:if="${clubSettings == null or clubSettings.logoUrl == null}" class="media-fallback"><i class="bi bi-trophy"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SPORTS ===================== -->
+    <section class="section section--alt" id="sports">
+        <div class="container">
+            <div class="section-head">
+                <span class="eyebrow">What We Play</span>
+                <h2>Sports We Champion</h2>
+                <p>Seven disciplines and growing - find your game and represent Southeast University with pride.</p>
+            </div>
+            <div class="grid grid-4">
+                <a class="sport-tile" data-aos="zoom-in" th:each="sport,i : ${sportsList}" th:attr="data-aos-delay=${i.index * 60}" th:href="@{/sports}">
+                    <img th:if="${sport.imageUrl != null}" th:src="${sport.imageUrl}" th:alt="${sport.name}" loading="lazy" decoding="async">
+                    <span class="sport-tile__label" th:text="${sport.name}">Sport</span>
+                </a>
+                <th:block th:if="${sportsList == null or #lists.isEmpty(sportsList)}">
+                    <a class="sport-tile hero--fallback" th:each="name,i : ${ {'Football','Cricket','Basketball','Volleyball','Badminton','Table Tennis','Chess'} }"
+                       data-aos="zoom-in" th:attr="data-aos-delay=${i.index * 60}" th:href="@{/sports}">
+                        <span class="sport-tile__label" th:text="${name}">Sport</span>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== EXECUTIVE COMMITTEE ===================== -->
+    <section class="section" id="committee">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Leadership</span><h2>Executive Committee</h2><p>Meet the dedicated team steering the club forward.</p></div>
+            <div class="grid grid-4">
+                <article class="card member-card" data-aos="fade-up" th:each="m,i : ${executiveCommittee}" th:attr="data-aos-delay=${i.index * 60}">
+                    <img class="member-card__avatar" th:if="${m.photoUrl != null}" th:src="${m.photoUrl}" th:alt="${m.name}" loading="lazy" decoding="async">
+                    <div class="member-card__avatar avatar-fallback" th:if="${m.photoUrl == null}"><i class="bi bi-person"></i></div>
+                    <h3 class="card__title" th:text="${m.name}">Member Name</h3>
+                    <div class="member-card__role" th:text="${m.position}">Position</div>
+                    <p class="u-sm u-mt-1" th:text="${m.department + ' · Batch ' + m.batch}">Dept · Batch</p>
+                    <div class="member-card__socials">
+                        <a th:if="${m.facebookUrl != null}" th:href="${m.facebookUrl}" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a th:if="${m.linkedinUrl != null}" th:href="${m.linkedinUrl}" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${executiveCommittee == null or #lists.isEmpty(executiveCommittee)}"
+                 th:replace="~{fragments/components :: emptyState('bi-people', 'No committee members yet', 'Executive committee members will appear here once published.', null, null)}"></div>
+            <div class="u-text-center u-mt-4">
+                <a class="btn btn-outline" th:href="@{/committee/executive}">View full committee <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== UPCOMING EVENTS ===================== -->
+    <section class="section section--alt" id="events">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Don't Miss Out</span><h2>Upcoming Events</h2><p>Tournaments, trials and ceremonies on the horizon.</p></div>
+            <div class="grid grid-3" th:if="${upcomingEvents != null and !#lists.isEmpty(upcomingEvents)}">
+                <article class="card" data-aos="fade-up" th:each="ev,i : ${upcomingEvents}" th:attr="data-aos-delay=${i.index * 80}">
+                    <div class="card__media">
+                        <img th:if="${ev.bannerUrl != null}" th:src="${ev.bannerUrl}" th:alt="${ev.title}" loading="lazy" decoding="async">
+                        <div th:if="${ev.bannerUrl == null}" class="fill-block gradient-block"></div>
+                    </div>
+                    <div class="card__body">
+                        <div class="card__meta">
+                            <span><i class="bi bi-calendar-event"></i> <span th:text="${ev.eventDate} ?: 'TBA'">Date</span></span>
+                            <span th:if="${ev.venue != null}"><i class="bi bi-geo-alt"></i> <span th:text="${ev.venue}">Venue</span></span>
+                        </div>
+                        <h3 class="card__title" th:text="${ev.title}">Event Title</h3>
+                        <p class="u-clamp-2" th:text="${ev.description}">Description</p>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${upcomingEvents == null or #lists.isEmpty(upcomingEvents)}"
+                 th:replace="~{fragments/components :: emptyState('bi-calendar-x', 'No upcoming events', 'There are no events scheduled right now. Check back soon!', '/events', 'Browse all events')}"></div>
+            <div class="u-text-center u-mt-4" th:if="${upcomingEvents != null and !#lists.isEmpty(upcomingEvents)}">
+                <a class="btn btn-outline" th:href="@{/events}">All events <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== LATEST NEWS ===================== -->
+    <section class="section" id="news">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Newsroom</span><h2>Latest News</h2><p>Stories, results and announcements from across the club.</p></div>
+            <div class="grid grid-3" th:if="${latestNews != null and !#lists.isEmpty(latestNews)}">
+                <article class="card" data-aos="fade-up" th:each="n,i : ${latestNews}" th:attr="data-aos-delay=${i.index * 80}">
+                    <div class="card__media">
+                        <img th:if="${n.imageUrl != null}" th:src="${n.imageUrl}" th:alt="${n.title}" loading="lazy" decoding="async">
+                        <div th:if="${n.imageUrl == null}" class="fill-block gradient-block--primary"></div>
+                    </div>
+                    <div class="card__body">
+                        <div class="card__meta"><span><i class="bi bi-clock"></i> <span th:text="${n.publishDate} ?: ''">Date</span></span></div>
+                        <h3 class="card__title" th:text="${n.title}">News Title</h3>
+                        <a class="link-muted" th:href="@{/news}">Read more <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${latestNews == null or #lists.isEmpty(latestNews)}"
+                 th:replace="~{fragments/components :: emptyState('bi-newspaper', 'No news yet', 'There are no published articles at the moment.', '/news', 'Visit newsroom')}"></div>
+        </div>
+    </section>
+
+    <!-- ===================== ACHIEVEMENTS ===================== -->
+    <section class="section section--alt" id="achievements">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Our Pride</span><h2>Achievements</h2></div>
+            <div class="grid grid-4" th:if="${achievements != null and !#lists.isEmpty(achievements)}">
+                <article class="card" data-aos="zoom-in" th:each="a,i : ${achievements}" th:attr="data-aos-delay=${i.index * 60}">
+                    <div class="card__media aspect-1">
+                        <img th:if="${a.imageUrl != null}" th:src="${a.imageUrl}" th:alt="${a.title}" loading="lazy" decoding="async">
+                        <div th:if="${a.imageUrl == null}" class="media-fallback"><i class="bi bi-award"></i></div>
+                    </div>
+                    <div class="card__body">
+                        <span class="chip chip--accent" th:text="${a.achievementYear}">2026</span>
+                        <h3 class="card__title u-mt-1" th:text="${a.title}">Achievement</h3>
+                    </div>
+                </article>
+            </div>
+            <div th:if="${achievements == null or #lists.isEmpty(achievements)}"
+                 th:replace="~{fragments/components :: emptyState('bi-trophy', 'No achievements yet', 'Our accomplishments will be showcased here.', null, null)}"></div>
+        </div>
+    </section>
+
+    <!-- ===================== GALLERY ===================== -->
+    <section class="section" id="gallery">
+        <div class="container">
+            <div class="section-head"><span class="eyebrow">Moments</span><h2>Gallery</h2></div>
+            <div class="gallery-grid" th:if="${galleryImages != null and !#lists.isEmpty(galleryImages)}">
+                <a class="gallery-item" data-aos="fade-up" th:each="img : ${galleryImages}" th:href="@{/gallery}">
+                    <img th:if="${img.url != null}" th:src="${img.url}" th:alt="${img.caption} ?: 'Gallery image'" loading="lazy" decoding="async">
+                </a>
+            </div>
+            <div th:if="${galleryImages == null or #lists.isEmpty(galleryImages)}"
+                 th:replace="~{fragments/components :: emptyState('bi-images', 'No photos yet', 'Photos from our events will appear here.', '/gallery', 'Open gallery')}"></div>
+            <div class="u-text-center u-mt-4" th:if="${galleryImages != null and !#lists.isEmpty(galleryImages)}">
+                <a class="btn btn-outline" th:href="@{/gallery}">Open gallery <i class="bi bi-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== MEMBERSHIP ===================== -->
+    <section class="section section--alt" id="membership">
+        <div class="container">
+            <div class="notice-banner" data-aos="zoom-in">
+                <span class="chip" th:if="${membershipOpen}"><span class="pulse-dot"></span> Membership Open</span>
+                <span class="chip chip--accent" th:unless="${membershipOpen}"><span class="pulse-dot"></span> Status</span>
+                <h2 class="u-mt-2" th:if="${membershipOpen}">Membership Is Now Open!</h2>
+                <h2 class="u-mt-2" th:unless="${membershipOpen}">Membership is currently closed</h2>
+                <p class="u-max-720 u-mx-auto u-mt-2" th:if="${membershipPeriod != null and membershipPeriod.announcement != null}" th:text="${membershipPeriod.announcement}">Announcement</p>
+                <p class="u-max-720 u-mx-auto u-mt-2" th:if="${membershipPeriod == null or membershipPeriod.announcement == null}">
+                    Opening dates will be announced here. Register now so we can notify you the moment applications open.
+                </p>
+                <div class="u-mt-2 u-muted" th:if="${membershipPeriod != null}">
+                    <span th:if="${membershipPeriod.openingDate != null}"><i class="bi bi-calendar-check"></i> Opens: <span th:text="${membershipPeriod.openingDate}"></span></span>
+                    <span th:if="${membershipPeriod.closingDate != null}"> &nbsp; <i class="bi bi-calendar-x"></i> Closes: <span th:text="${membershipPeriod.closingDate}"></span></span>
+                </div>
+                <div class="u-mt-3">
+                    <a th:if="${membershipOpen}" class="btn btn-primary btn-lg" th:href="@{/student/dashboard}"><i class="bi bi-pencil-square"></i> Apply for Membership</a>
+                    <a th:unless="${membershipOpen}" class="btn btn-primary btn-lg" th:href="@{/register}"><i class="bi bi-bell"></i> Register to Get Notified</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section class="section" id="contact">
+        <div class="container grid grid-2 u-gap-wide u-align-start">
+            <div data-aos="fade-right">
+                <span class="eyebrow u-mb-2">Get in touch</span>
+                <h2>Contact Us</h2>
+                <p>Questions about the club, events or membership? We'd love to hear from you.</p>
+                <ul class="list-checks u-mt-3">
+                    <li><i class="bi bi-geo-alt"></i> <span th:text="${clubSettings != null and clubSettings.address != null ? clubSettings.address : 'Southeast University, Tejgaon, Dhaka'}">Address</span></li>
+                    <li><i class="bi bi-envelope"></i> <span th:text="${clubSettings != null and clubSettings.email != null ? clubSettings.email : 'sportsclub@seu.edu.bd'}">Email</span></li>
+                    <li><i class="bi bi-telephone"></i> <span th:text="${clubSettings != null and clubSettings.phone != null ? clubSettings.phone : '+880 0000 000000'}">Phone</span></li>
+                </ul>
+            </div>
+            <form class="card card-pad" data-aos="fade-left" th:action="@{/contact}" method="post" novalidate>
+                <div class="form-row">
+                    <div class="field"><label for="cName">Name</label><input class="control" id="cName" name="name" type="text" required></div>
+                    <div class="field"><label for="cEmail">Email</label><input class="control" id="cEmail" name="email" type="email" required></div>
+                </div>
+                <div class="field"><label for="cSubject">Subject</label><input class="control" id="cSubject" name="subject" type="text"></div>
+                <div class="field"><label for="cMsg">Message</label><textarea class="control" id="cMsg" name="message" rows="4" required></textarea></div>
+                <button class="btn btn-primary btn-block" type="submit"><i class="bi bi-send"></i> Send Message</button>
+            </form>
+        </div>
+    </section>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+
+</body>
+</html>

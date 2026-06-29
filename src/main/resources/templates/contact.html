@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Contact | SEU Games & Sports Club', 'Get in touch with the Southeast University Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('contact')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Contact Us</h1>
+            <p data-aos="fade-up" data-aos-delay="100">We'd love to hear from you.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Contact')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container grid grid-2 u-gap-wide u-align-start">
+            <div data-aos="fade-right">
+                <h2>Get in touch</h2>
+                <p>Questions about the club, events or membership? Send us a message and our team will respond.</p>
+
+                <ul class="contact-list u-mt-3">
+                    <li class="u-flex u-gap-2 u-items-start">
+                        <span class="brand__logo"><i class="bi bi-geo-alt"></i></span>
+                        <span><strong>Address</strong><br><span th:text="${clubSettings != null and clubSettings.address != null ? clubSettings.address : 'Southeast University, 251/A & 252 Tejgaon I/A, Dhaka 1208'}">Address</span></span>
+                    </li>
+                    <li class="u-flex u-gap-2 u-items-start u-mt-2">
+                        <span class="brand__logo"><i class="bi bi-envelope"></i></span>
+                        <span><strong>Email</strong><br>
+                        <a th:if="${clubSettings != null and clubSettings.email != null}" th:href="${'mailto:' + clubSettings.email}" th:text="${clubSettings.email}">email</a>
+                        <span th:if="${clubSettings == null or clubSettings.email == null}">sportsclub@seu.edu.bd</span></span>
+                    </li>
+                    <li class="u-flex u-gap-2 u-items-start u-mt-2">
+                        <span class="brand__logo"><i class="bi bi-telephone"></i></span>
+                        <span><strong>Phone</strong><br>
+                        <a th:if="${clubSettings != null and clubSettings.phone != null}" th:href="${'tel:' + clubSettings.phone}" th:text="${clubSettings.phone}">phone</a>
+                        <span th:if="${clubSettings == null or clubSettings.phone == null}">+880 0000 000000</span></span>
+                    </li>
+                </ul>
+
+                <div class="u-mt-3" th:if="${clubSettings != null and clubSettings.googleMapLink != null}">
+                    <a class="btn btn-outline" th:href="${clubSettings.googleMapLink}" target="_blank" rel="noopener"><i class="bi bi-map"></i> Open in Google Maps</a>
+                </div>
+            </div>
+
+            <form class="card card-pad" data-aos="fade-left" th:action="@{/contact}" method="post" novalidate>
+                <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}" role="alert"></div>
+                <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}" role="alert"></div>
+
+                <div class="form-row">
+                    <div class="field"><label for="name">Full Name</label><input class="control" id="name" name="name" type="text" placeholder="Your name" required></div>
+                    <div class="field"><label for="email">Email</label><input class="control" id="email" name="email" type="email" placeholder="you@example.com" required></div>
+                </div>
+                <div class="field"><label for="subject">Subject</label><input class="control" id="subject" name="subject" type="text" placeholder="How can we help?"></div>
+                <div class="field"><label for="message">Message</label><textarea class="control" id="message" name="message" rows="5" placeholder="Write your message..." required></textarea></div>
+                <button class="btn btn-primary btn-block btn-lg" type="submit"><i class="bi bi-send"></i> Send Message</button>
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

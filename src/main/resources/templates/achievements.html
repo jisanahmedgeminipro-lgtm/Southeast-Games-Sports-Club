@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Achievements | SEU Games & Sports Club', 'Trophies, titles and milestones earned by the SEU Games & Sports Club.')}"></head>
+<body>
+<th:block th:replace="~{fragments/ui :: chrome}"></th:block>
+<nav th:replace="~{fragments/navbar :: navbar('achievements')}"></nav>
+
+<main>
+    <section class="page-hero">
+        <div class="container">
+            <h1 data-aos="fade-up">Achievements</h1>
+            <p data-aos="fade-up" data-aos-delay="100">A proud record of sporting success.</p>
+            <div th:replace="~{fragments/components :: breadcrumb('Achievements')}"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="timeline" th:if="${achievements != null and !#lists.isEmpty(achievements)}">
+                <div class="timeline__item" data-aos="fade-up" th:each="a : ${achievements}">
+                    <span class="timeline__year" th:text="${a.achievementYear}">2026</span>
+                    <div class="card card-pad-sm u-mt-1 u-flex u-items-center u-gap-2">
+                        <img th:if="${a.imageUrl != null}" class="avatar-lg" th:src="${a.imageUrl}" th:alt="${a.title}" loading="lazy" decoding="async">
+                        <div th:if="${a.imageUrl == null}" class="avatar-lg media-fallback"><i class="bi bi-trophy"></i></div>
+                        <div>
+                            <h3 class="card__title" th:text="${a.title}">Achievement title</h3>
+                            <p class="u-mt-1" th:if="${a.description != null}" th:text="${a.description}">Description</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${achievements == null or #lists.isEmpty(achievements)}"
+                 th:replace="~{fragments/components :: emptyState('bi-trophy', 'No achievements yet', 'Our trophies and titles will be showcased here.', null, null)}"></div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+<button th:replace="~{fragments/ui :: backToTop}"></button>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

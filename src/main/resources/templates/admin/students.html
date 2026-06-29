@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Students | SEU Admin', 'Manage registered students.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('students')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Students')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2>Students</h2></div>
+
+            <div class="dt dt--responsive" id="studentsTable" data-enhanced-table data-page-size="15"
+                 data-export-name="students" data-bulk-action="/admin/students/bulk-delete">
+                <div class="dt__toolbar">
+                    <div class="dt__search"><i class="bi bi-search"></i><input type="search" data-dt-search placeholder="Search students..."></div>
+                    <select class="dt__filter" data-dt-filter data-col="3" aria-label="Filter by department">
+                        <option value="">All departments</option>
+                        <option th:each="d : ${departments}" th:value="${d}" th:text="${d}">Dept</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export><i class="bi bi-filetype-csv"></i> CSV</button>
+                    <button class="btn btn-outline btn-sm" type="button" data-dt-export-excel><i class="bi bi-file-earmark-excel"></i> Excel</button>
+                </div>
+                <div class="dt__bulkbar" data-dt-bulkbar><span><strong data-dt-count>0</strong> selected</span>
+                    <button class="btn btn-danger btn-sm" type="button" data-dt-bulk-delete><i class="bi bi-trash"></i> Delete selected</button></div>
+                <div class="table-wrap"><table class="table">
+                    <thead><tr>
+                        <th data-dt-skip><input type="checkbox" data-dt-select-all></th>
+                        <th data-sort>Name</th><th data-sort>Student ID</th><th data-sort>Department</th>
+                        <th data-sort>Batch</th><th>Email</th><th data-sort>Status</th><th data-dt-skip>Actions</th>
+                    </tr></thead>
+                    <tbody>
+                        <tr th:each="s : ${students}">
+                            <td data-dt-skip><input type="checkbox" data-dt-row name="ids" th:value="${s.id}"></td>
+                            <td data-label="Name" th:text="${s.fullName}">Jane Doe</td>
+                            <td data-label="Student ID" th:text="${s.studentId}">2023000000000</td>
+                            <td data-label="Department" th:text="${s.department}">CSE</td>
+                            <td data-label="Batch" th:text="${s.batch}">63</td>
+                            <td data-label="Email" th:text="${s.email}">email</td>
+                            <td data-label="Status"><span class="badge" th:classappend="${s.active} ? 'badge--green' : 'badge--slate'" th:text="${s.active} ? 'Active' : 'Inactive'">Active</span></td>
+                            <td data-label="Actions" data-dt-skip><div class="row-actions">
+                                <a class="icon-btn" th:href="@{/admin/students/{id}(id=${s.id})}" title="View"><i class="bi bi-eye"></i></a>
+                                <form th:action="@{/admin/students/{id}/activate(id=${s.id})}" method="post" class="form-inline">
+                                    <input type="hidden" name="active" th:value="${!s.active}">
+                                    <button class="icon-btn" type="submit" th:title="${s.active} ? 'Deactivate' : 'Activate'">
+                                        <i class="bi" th:classappend="${s.active} ? 'bi-pause-circle' : 'bi-play-circle'"></i></button>
+                                </form>
+                                <form th:action="@{/admin/students/{id}/delete(id=${s.id})}" method="post" class="form-inline">
+                                    <button class="icon-btn" type="button" data-confirm="Delete this student account?" data-confirm-title="Delete student?"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(students)}"><td colspan="8">
+                            <div th:replace="~{fragments/components :: emptyState('bi-people','No students','Registered students will appear here.',null,null)}"></div></td></tr>
+                    </tbody>
+                </table></div>
+                <div class="dt__pagination"><span class="u-muted u-sm" data-dt-info></span><div class="pages" data-dt-pages></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

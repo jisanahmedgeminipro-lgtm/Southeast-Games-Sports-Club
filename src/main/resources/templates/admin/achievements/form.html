@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Achievement | SEU Admin', 'Create or edit an achievement.')}"></head>
+<body>
+<div class="dash">
+    <aside th:replace="~{fragments/admin :: sidebar('achievements')}"></aside>
+    <div class="dash__overlay"></div>
+    <div class="dash__main">
+        <header th:replace="~{fragments/admin :: topbar('Achievement')}"></header>
+        <div class="dash__content">
+            <th:block th:replace="~{fragments/admin :: flash}"></th:block>
+            <div class="admin-head"><h2 th:text="${achievement != null} ? 'Edit Achievement' : 'New Achievement'">Achievement</h2>
+                <a class="btn btn-ghost" th:href="@{/admin/achievements}"><i class="bi bi-arrow-left"></i> Back</a></div>
+
+            <form class="form-card" th:action="@{/admin/achievements/save}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:if="${achievement != null}" th:value="${achievement.id}">
+                <div class="form-grid">
+                    <div class="field"><label for="title">Title</label>
+                        <input class="control" id="title" name="title" type="text" required th:value="${achievement?.title}"></div>
+                    <div class="field"><label for="achievementYear">Year</label>
+                        <input class="control" id="achievementYear" name="achievementYear" type="number" min="1990" max="2100" required th:value="${achievement?.achievementYear}"></div>
+                    <div class="field"><label for="sportId">Related Sport</label>
+                        <select class="control" id="sportId" name="sportId">
+                            <option value="">None</option>
+                            <option th:each="sp : ${sports}" th:value="${sp.id}" th:text="${sp.name}"
+                                    th:selected="${achievement != null and achievement.sportId == sp.id}">Sport</option>
+                        </select></div>
+                    <div class="field"><label for="displayOrder">Display Order</label>
+                        <input class="control" id="displayOrder" name="displayOrder" type="number" th:value="${achievement?.displayOrder}"></div>
+                </div>
+                <div class="field"><label for="description">Description</label>
+                    <textarea class="control" id="description" name="description" rows="3" th:text="${achievement?.description}"></textarea></div>
+
+                <label class="u-fw-600 u-mb-1 u-block">Image</label>
+                <img class="current-image" th:if="${achievement != null and achievement.imageUrl != null}" th:src="${achievement.imageUrl}" alt="Image">
+                <input type="hidden" name="currentImageMediaId" th:value="${achievement?.imageMediaId}">
+                <div th:replace="~{fragments/components :: imageUpload('imageFile','Upload image (optional)',false)}"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit"><i class="bi bi-save"></i> Save</button>
+                    <a class="btn btn-ghost" th:href="@{/admin/achievements}">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>
