@@ -8,6 +8,7 @@
         <h1>Something went wrong</h1>
         <p>An unexpected error occurred on our end. Our team has been notified - please try again in a moment.</p>
         <p th:if="${errorDetail != null or message != null}" class="status-page__detail" th:text="${errorDetail} ?: ${message}">detail</p>
+        <p th:if="${errorRootCause != null}" class="status-page__detail" th:text="${errorRootCause}">root cause</p>
         <div class="status-page__actions">
             <a class="btn btn-light btn-lg" th:href="@{/}"><i class="bi bi-house"></i> Back to home</a>
             <a class="btn btn-outline btn-lg" href="#" data-reload><i class="bi bi-arrow-clockwise"></i> Try again</a>

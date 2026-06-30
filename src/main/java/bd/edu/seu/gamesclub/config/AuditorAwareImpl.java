@@ -25,10 +25,15 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
+                return Optional.empty();
+            }
+            return userRepository.findByEmail(auth.getName()).map(u -> u.getId());
+        } catch (RuntimeException ex) {
+            // Never let auditor resolution break a persist/flush.
             return Optional.empty();
         }
-        return userRepository.findByEmail(auth.getName()).map(u -> u.getId());
     }
 }

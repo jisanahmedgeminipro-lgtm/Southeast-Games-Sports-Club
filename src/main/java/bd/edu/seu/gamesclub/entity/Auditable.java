@@ -3,6 +3,8 @@ package bd.edu.seu.gamesclub.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -60,4 +62,28 @@ public abstract class Auditable implements Serializable {
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    /**
+     * Safety net so the NOT NULL audit timestamps are <em>always</em> populated,
+     * even if Spring Data JPA auditing is unavailable for some reason. This runs
+     * in addition to {@link AuditingEntityListener} and prevents
+     * "Could not commit JPA transaction" failures caused by null timestamps.
+     */
+    @PrePersist
+    void onPrePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        if (createdAt == null) {
+            createdAt = now;
+        }
+        if (updatedAt == null) {
+            updatedAt = now;
+        }
+    }
+
+    @PreUpdate
+    void onPreUpdate() {
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+    }
 }

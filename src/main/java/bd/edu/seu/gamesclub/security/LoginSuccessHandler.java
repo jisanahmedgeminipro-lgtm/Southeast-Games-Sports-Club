@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,10 +26,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     }
 
     @Override
-    @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        // Record last-login time, but never let a write hiccup break the login flow.
+        // Record last-login time in its own transaction so a write hiccup can
+        // never break the login flow (the commit happens inside save()).
         try {
             userRepository.findByEmail(authentication.getName()).ifPresent(u -> {
                 u.setLastLoginAt(LocalDateTime.now());

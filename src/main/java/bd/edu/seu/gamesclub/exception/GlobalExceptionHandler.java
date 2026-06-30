@@ -43,10 +43,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleUnexpected(Exception ex, HttpServletRequest request) {
         log.error("Unhandled error for {}", request.getRequestURI(), ex);
+        // Walk to the root cause so the (non-production) error page can show the
+        // real reason - e.g. "Column 'xyz' cannot be null" - instead of the
+        // generic "Could not commit JPA transaction" wrapper.
+        Throwable root = ex;
+        while (root.getCause() != null && root.getCause() != root) {
+            root = root.getCause();
+        }
         ModelAndView mav = new ModelAndView("error/500");
-        // Surface a concise technical detail so it can be shown on non-production
-        // error pages (the template only renders it when present).
         mav.addObject("errorDetail", ex.getClass().getSimpleName() + ": " + ex.getMessage());
+        if (root != ex) {
+            mav.addObject("errorRootCause", root.getClass().getSimpleName() + ": " + root.getMessage());
+        }
         mav.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return mav;
     }

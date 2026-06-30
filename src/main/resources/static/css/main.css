@@ -836,3 +836,13 @@ details.card[open] > summary::after { transform: rotate(180deg); }
     border-radius: var(--radius-sm);
     word-break: break-word;
 }
+
+
+/* Hero gradient text must be light on the dark hero (not blue-on-blue) */
+.hero .text-gradient,
+.page-hero .text-gradient {
+    background: linear-gradient(120deg, #ffffff 0%, #f5b301 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
