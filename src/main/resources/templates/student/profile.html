@@ -13,7 +13,7 @@
             <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
             <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
             <span class="label">Account</span>
-            <a class="active" th:href="@{/student/profile}"><i class="bi bi-gear"></i> Settings</a>
+            <a th:href="@{/student/profile/edit}"><i class="bi bi-gear"></i> Settings</a>
         </nav>
         <div class="dash__sidebar-foot">
             <form th:action="@{/logout}" method="post">
@@ -45,6 +45,11 @@
         <div class="dash__content">
             <div class="js-flash" th:if="${successMessage}" data-type="success" th:attr="data-message=${successMessage}"></div>
             <div class="js-flash" th:if="${errorMessage}" data-type="error" th:attr="data-message=${errorMessage}"></div>
+
+            <div class="admin-head" th:if="${studentProfile != null}">
+                <h2>My Profile</h2>
+                <a class="btn btn-primary" th:href="@{/student/profile/edit}"><i class="bi bi-pencil-square"></i> Edit Profile</a>
+            </div>
 
             <!-- No profile fallback -->
             <div class="panel" th:if="${studentProfile == null}">

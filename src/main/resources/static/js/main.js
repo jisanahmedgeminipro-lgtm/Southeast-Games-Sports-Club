@@ -249,6 +249,24 @@
             });
             overlay && overlay.addEventListener("click", close);
         }
+
+        /* Persist sidebar scroll position so navigating between dashboard pages
+           doesn't reset it back to the top. */
+        if (sidebar) {
+            const KEY = "seu-sidebar-scroll";
+            const saved = sessionStorage.getItem(KEY);
+            if (saved !== null) {
+                sidebar.scrollTop = parseInt(saved, 10) || 0;
+            }
+            let raf = null;
+            sidebar.addEventListener("scroll", () => {
+                if (raf) return;
+                raf = requestAnimationFrame(() => {
+                    sessionStorage.setItem(KEY, String(sidebar.scrollTop));
+                    raf = null;
+                });
+            }, { passive: true });
+        }
     });
 })();
 
