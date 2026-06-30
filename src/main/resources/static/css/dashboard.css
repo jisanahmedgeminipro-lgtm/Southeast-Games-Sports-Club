@@ -132,3 +132,55 @@
     box-shadow: var(--shadow-md);
 }
 .profile-avatar--img { object-fit: cover; }
+
+
+/* ==========================================================================
+   Mobile (phone) view enhancements - applies to all dashboard/admin pages
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Tighter content padding on phones */
+    .dash__content { padding: 1rem; }
+    .dash__topbar { padding-left: 1rem; padding-right: 1rem; }
+    .dash__topbar h1 { font-size: 1.1rem; }
+    .admin-head { flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+    .form-card { padding: 1.1rem; }
+
+    /* Data-table toolbar stacks */
+    .dt__toolbar { flex-direction: column; align-items: stretch; }
+    .dt__toolbar .btn { width: 100%; justify-content: center; }
+    .dt__search { min-width: 0; }
+
+    /* Turn responsive tables into stacked cards (uses data-label on each cell) */
+    .dt--responsive table thead { display: none; }
+    .dt--responsive table,
+    .dt--responsive table tbody,
+    .dt--responsive table tr,
+    .dt--responsive table td { display: block; width: 100%; }
+    .dt--responsive table tr {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.85rem;
+        padding: 0.4rem 0.85rem;
+        background: var(--surface);
+    }
+    .dt--responsive table td {
+        display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+        padding: 0.5rem 0; border: none; border-bottom: 1px solid var(--border);
+        text-align: right;
+    }
+    .dt--responsive table tr td:last-child { border-bottom: none; }
+    .dt--responsive table td::before {
+        content: attr(data-label);
+        font-weight: 700; color: var(--text-muted);
+        text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em;
+        text-align: left;
+    }
+    /* Cells without a label (checkbox / image / actions) align normally */
+    .dt--responsive table td[data-dt-skip] { justify-content: flex-end; }
+    .dt--responsive table td[data-dt-skip]::before { content: ""; }
+}
+
+/* Plain tables (non-dt) just scroll horizontally on small screens */
+@media (max-width: 768px) {
+    .table-wrap { -webkit-overflow-scrolling: touch; }
+}
