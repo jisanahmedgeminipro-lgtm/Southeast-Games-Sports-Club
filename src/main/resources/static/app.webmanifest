@@ -8,7 +8,7 @@
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#070f20",
-  "theme_color": "#0b2e6b",
+  "theme_color": "#1560b3",
   "categories": ["sports", "education"],
   "icons": [
     {

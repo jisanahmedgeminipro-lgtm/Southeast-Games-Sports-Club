@@ -8,7 +8,42 @@
 -->
 <body>
 <nav th:fragment="navbar(active)" class="navbar" aria-label="Primary">
-    <div class="container navbar__inner">
+
+    <!-- Top utility bar: contact + social (SEU style) -->
+    <div class="navbar__utility">
+        <div class="container navbar__utility-inner">
+            <div class="navbar__utility-contact">
+                <a th:if="${clubSettings != null and clubSettings.phone != null}"
+                   th:href="${'tel:' + clubSettings.phone}">
+                    <i class="bi bi-telephone-fill"></i> <span th:text="${clubSettings.phone}">+880 9617 901112</span>
+                </a>
+                <a th:if="${clubSettings == null or clubSettings.email == null}" th:href="@{/contact}">
+                    <i class="bi bi-envelope-fill"></i> <span>sportsclub@seu.edu.bd</span>
+                </a>
+                <a th:if="${clubSettings != null and clubSettings.email != null}"
+                   th:href="${'mailto:' + clubSettings.email}">
+                    <i class="bi bi-envelope-fill"></i> <span th:text="${clubSettings.email}">sportsclub@seu.edu.bd</span>
+                </a>
+            </div>
+            <div class="navbar__utility-links">
+                <a th:if="${socialLinks != null}" th:each="link : ${socialLinks}"
+                   th:href="${link.url}" target="_blank" rel="noopener noreferrer"
+                   th:attr="aria-label=${link.platform}">
+                    <i class="bi" th:classappend="${link.iconClass}"></i>
+                </a>
+                <th:block th:if="${socialLinks == null or #lists.isEmpty(socialLinks)}">
+                    <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </th:block>
+                <a th:href="@{/contact}">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main bar -->
+    <div class="navbar__bar">
+        <div class="container navbar__inner">
 
         <!-- Brand -->
         <a class="brand" th:href="@{/}" aria-label="Home">
@@ -63,6 +98,7 @@
                     aria-controls="primaryNav" aria-expanded="false">
                 <i class="bi bi-list"></i>
             </button>
+        </div>
         </div>
     </div>
 </nav>
