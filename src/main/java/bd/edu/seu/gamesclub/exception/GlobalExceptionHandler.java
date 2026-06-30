@@ -44,6 +44,9 @@ public class GlobalExceptionHandler {
     public ModelAndView handleUnexpected(Exception ex, HttpServletRequest request) {
         log.error("Unhandled error for {}", request.getRequestURI(), ex);
         ModelAndView mav = new ModelAndView("error/500");
+        // Surface a concise technical detail so it can be shown on non-production
+        // error pages (the template only renders it when present).
+        mav.addObject("errorDetail", ex.getClass().getSimpleName() + ": " + ex.getMessage());
         mav.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         return mav;
     }

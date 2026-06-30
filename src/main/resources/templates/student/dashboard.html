@@ -51,7 +51,10 @@
                         <h2 class="card__title">Welcome back, <span th:text="${studentProfile != null ? studentProfile.fullName : 'Champion'}">Champion</span>!</h2>
                         <p>Here's what's happening with your club account.</p>
                     </div>
-                    <a th:if="${membershipOpen}" class="btn btn-primary" href="#membership-panel"><i class="bi bi-pencil-square"></i> Apply for Membership</a>
+                    <form th:if="${membershipOpen and myApplication == null}" th:action="@{/student/membership/apply}" method="post">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Apply for Membership</button>
+                    </form>
+                    <a th:if="${membershipOpen and myApplication != null}" class="btn btn-outline" href="#membership-panel"><i class="bi bi-card-checklist"></i> View Application</a>
                 </div>
             </div>
 
