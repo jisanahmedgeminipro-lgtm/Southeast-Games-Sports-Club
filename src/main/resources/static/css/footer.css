@@ -6,13 +6,13 @@
 
 .site-footer {
     /* Scoped design tokens (kept local so the footer is self-contained) */
-    --ft-bg-start: #0b1b29;
-    --ft-bg-end: #0f2b38;
+    --ft-bg-start: #06163a;
+    --ft-bg-end: #0b2e6b;
     --ft-text: #b9c6d2;
     --ft-text-muted: #8595a3;
     --ft-heading: #ffffff;
-    --ft-accent: #2dd4bf;        /* teal */
-    --ft-accent-soft: #14b8a6;
+    --ft-accent: #f5b301;        /* SEU gold */
+    --ft-accent-soft: #3f6fd1;   /* royal blue */
     --ft-border: rgba(255, 255, 255, 0.08);
 
     position: relative;

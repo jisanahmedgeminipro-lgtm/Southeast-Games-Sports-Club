@@ -5,12 +5,12 @@
 
 /* ----------------------------- Design tokens ----------------------------- */
 :root {
-    /* Brand palette */
-    --c-primary: #0f766e;
-    --c-primary-600: #0d9488;
-    --c-primary-400: #2dd4bf;
-    --c-accent: #f59e0b;
-    --c-accent-600: #d97706;
+    /* Brand palette - Southeast University (navy blue + gold) */
+    --c-primary: #0b2e6b;       /* SEU deep navy */
+    --c-primary-600: #143d8a;   /* hover / lighter navy */
+    --c-primary-400: #3f6fd1;   /* bright royal-blue accent */
+    --c-accent: #f5b301;        /* SEU gold */
+    --c-accent-600: #d99500;    /* deep gold */
 
     /* Light theme surfaces */
     --bg: #f7f9fb;
@@ -29,8 +29,8 @@
     --nav-bg: rgba(255, 255, 255, 0.72);
 
     /* Gradients */
-    --grad-primary: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #2dd4bf 100%);
-    --grad-hero: linear-gradient(160deg, #06262b 0%, #0b3a3f 45%, #0f766e 100%);
+    --grad-primary: linear-gradient(135deg, #0b2e6b 0%, #1e4ba0 50%, #3f6fd1 100%);
+    --grad-hero: linear-gradient(160deg, #06163a 0%, #0b2e6b 55%, #143d8a 100%);
 
     /* Typography */
     --font-body: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -50,20 +50,20 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-    --bg: #0a141b;
-    --bg-alt: #0e1a22;
-    --surface: #0f1c25;
-    --surface-2: #13242e;
-    --text: #d6e2ea;
-    --text-muted: #8aa0ad;
-    --heading: #f4f8fb;
+    --bg: #070f20;
+    --bg-alt: #0a1730;
+    --surface: #0c1a36;
+    --surface-2: #112141;
+    --text: #d6e0f0;
+    --text-muted: #8a9bb8;
+    --heading: #f4f7fc;
     --border: rgba(255, 255, 255, 0.09);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.45);
     --shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.55);
-    --glass-bg: rgba(15, 28, 37, 0.6);
+    --glass-bg: rgba(12, 26, 54, 0.6);
     --glass-border: rgba(255, 255, 255, 0.08);
-    --nav-bg: rgba(10, 20, 27, 0.72);
+    --nav-bg: rgba(7, 15, 32, 0.72);
 }
 
 /* ----------------------------- Reset ----------------------------- */
@@ -753,9 +753,9 @@ body.is-leaving { opacity: 0; transition: opacity 0.25s var(--ease); }
    ERROR / MAINTENANCE PAGES
    ========================================================================== */
 .status-page { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 2rem; background: var(--grad-hero); color: #fff; position: relative; overflow: hidden; }
-.status-page::before { content: ""; position: absolute; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(45,212,191,0.25), transparent 70%); top: -160px; right: -120px; }
+.status-page::before { content: ""; position: absolute; width: 480px; height: 480px; border-radius: 50%; background: radial-gradient(circle, rgba(63,111,209,0.28), transparent 70%); top: -160px; right: -120px; }
 .status-page__inner { position: relative; z-index: 2; max-width: 560px; }
-.status-page__code { font-family: var(--font-head); font-weight: 800; font-size: clamp(5rem, 18vw, 9rem); line-height: 1; background: linear-gradient(135deg, #fff, #2dd4bf); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.status-page__code { font-family: var(--font-head); font-weight: 800; font-size: clamp(5rem, 18vw, 9rem); line-height: 1; background: linear-gradient(135deg, #fff, #f5b301); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .status-page h1 { color: #fff; margin-bottom: 0.6rem; }
 .status-page p { color: rgba(255,255,255,0.85); margin-bottom: 1.8rem; }
 .status-page__actions { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }

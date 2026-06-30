@@ -60,10 +60,10 @@
 
         <div class="dash__content">
             <div class="stat-cards">
-                <div class="stat-card"><div class="stat-card__icon"><i class="bi bi-people"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalStudents : 0}" data-counter="0" th:text="${stats != null ? stats.totalStudents : 0}">0</div><div class="stat-card__label">Total Students</div></div></div>
-                <div class="stat-card"><div class="stat-card__icon amber"><i class="bi bi-calendar-event"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalEvents : 0}" data-counter="0" th:text="${stats != null ? stats.totalEvents : 0}">0</div><div class="stat-card__label">Total Events</div></div></div>
-                <div class="stat-card"><div class="stat-card__icon violet"><i class="bi bi-newspaper"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalNews : 0}" data-counter="0" th:text="${stats != null ? stats.totalNews : 0}">0</div><div class="stat-card__label">Total News</div></div></div>
-                <div class="stat-card"><div class="stat-card__icon rose"><i class="bi bi-images"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalGalleryImages : 0}" data-counter="0" th:text="${stats != null ? stats.totalGalleryImages : 0}">0</div><div class="stat-card__label">Gallery Images</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon"><i class="bi bi-people"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalStudents : 0}" th:text="${stats != null ? stats.totalStudents : 0}">0</div><div class="stat-card__label">Total Students</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon amber"><i class="bi bi-calendar-event"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalEvents : 0}" th:text="${stats != null ? stats.totalEvents : 0}">0</div><div class="stat-card__label">Total Events</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon violet"><i class="bi bi-newspaper"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalNews : 0}" th:text="${stats != null ? stats.totalNews : 0}">0</div><div class="stat-card__label">Total News</div></div></div>
+                <div class="stat-card"><div class="stat-card__icon rose"><i class="bi bi-images"></i></div><div><div class="stat-card__num" th:attr="data-counter=${stats != null ? stats.totalGalleryImages : 0}" th:text="${stats != null ? stats.totalGalleryImages : 0}">0</div><div class="stat-card__label">Gallery Images</div></div></div>
             </div>
 
             <div class="stat-cards">

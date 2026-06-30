@@ -53,8 +53,17 @@ public class StudentController {
     }
 
     @GetMapping("/student/profile")
-    public String profile() {
-        return "redirect:/student/dashboard";
+    public String profile(Principal principal, Model model) {
+        String email = principal.getName();
+        StudentResponse profile = null;
+        try {
+            profile = studentService.getByEmail(email);
+        } catch (ResourceNotFoundException ignored) {
+            // profile may not exist yet; template degrades gracefully
+        }
+        model.addAttribute("studentProfile", profile);
+        model.addAttribute("currentUser", Map.of("email", email));
+        return "student/profile";
     }
 
     @GetMapping("/student/notices")

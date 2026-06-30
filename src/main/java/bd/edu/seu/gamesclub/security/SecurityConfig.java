@@ -3,11 +3,13 @@ package bd.edu.seu.gamesclub.security;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -53,7 +55,13 @@ public class SecurityConfig {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
-                .failureUrl("/login?error")
+                .failureHandler((request, response, exception) -> {
+                    // Distinguish "not verified / disabled" from bad credentials so
+                    // the login page can show an accurate, helpful message.
+                    String redirect = (exception instanceof DisabledException)
+                            ? "/login?disabled" : "/login?error";
+                    response.sendRedirect(request.getContextPath() + redirect);
+                })
                 .permitAll()
             )
             .logout(logout -> logout
@@ -82,5 +90,15 @@ public class SecurityConfig {
         // CSRF protection is enabled by default; Thymeleaf injects the token into
         // every form rendered with th:action.
         return http.build();
+    }
+
+    /**
+     * Publishes servlet session lifecycle events so Spring Security's concurrent
+     * session control ({@code maximumSessions}) can correctly track and evict
+     * expired/destroyed sessions from its registry.
+     */
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 }

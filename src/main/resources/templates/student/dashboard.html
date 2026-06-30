@@ -9,7 +9,7 @@
         <nav class="dash__nav" aria-label="Student navigation">
             <a class="active" th:href="@{/student/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
             <a th:href="@{/student/profile}"><i class="bi bi-person-circle"></i> My Profile</a>
-            <a th:href="@{/student/membership}"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a href="#membership-panel"><i class="bi bi-card-checklist"></i> Membership</a>
             <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
             <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
             <span class="label">Account</span>
@@ -42,13 +42,16 @@
         </header>
 
         <div class="dash__content">
+            <div class="js-flash" th:if="${successMessage}" data-type="success" th:attr="data-message=${successMessage}"></div>
+            <div class="js-flash" th:if="${errorMessage}" data-type="error" th:attr="data-message=${errorMessage}"></div>
+
             <div class="panel u-mb-3">
                 <div class="panel__body u-flex u-justify-between u-items-center u-wrap u-gap-2">
                     <div>
                         <h2 class="card__title">Welcome back, <span th:text="${studentProfile != null ? studentProfile.fullName : 'Champion'}">Champion</span>!</h2>
                         <p>Here's what's happening with your club account.</p>
                     </div>
-                    <a th:if="${membershipOpen}" class="btn btn-primary" th:href="@{/student/membership}"><i class="bi bi-pencil-square"></i> Apply for Membership</a>
+                    <a th:if="${membershipOpen}" class="btn btn-primary" href="#membership-panel"><i class="bi bi-pencil-square"></i> Apply for Membership</a>
                 </div>
             </div>
 
@@ -60,7 +63,7 @@
             </div>
 
             <div class="grid grid-2 u-mt-3 u-align-start">
-                <div class="panel">
+                <div class="panel" id="membership-panel">
                     <div class="panel__head"><h3>Membership</h3></div>
                     <div class="panel__body">
                         <div class="alert alert-info" th:if="${!membershipOpen}">Membership is currently closed. We'll notify you by email when it opens.</div>
@@ -68,7 +71,9 @@
                         <p th:if="${myApplication != null}">Your application status:
                             <span class="badge" th:classappend="${myApplication.status == 'APPROVED'} ? 'badge--green' : (${myApplication.status == 'REJECTED'} ? 'badge--red' : 'badge--amber')" th:text="${myApplication.status}">PENDING</span>
                         </p>
-                        <a th:if="${membershipOpen and myApplication == null}" class="btn btn-primary u-mt-2" th:href="@{/student/membership/apply}">Apply now</a>
+                        <form th:if="${membershipOpen and myApplication == null}" th:action="@{/student/membership/apply}" method="post" class="u-mt-2">
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i> Apply now</button>
+                        </form>
                     </div>
                 </div>
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('My Profile | SEU Games & Sports Club', 'Your SEU Games & Sports Club student profile.')}"></head>
+<body>
+<div class="dash">
+
+    <aside class="dash__sidebar">
+        <a class="dash__brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span> SEU Sports</a>
+        <nav class="dash__nav" aria-label="Student navigation">
+            <a th:href="@{/student/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a class="active" th:href="@{/student/profile}"><i class="bi bi-person-circle"></i> My Profile</a>
+            <a th:href="@{/student/dashboard}"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
+            <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
+            <span class="label">Account</span>
+            <a class="active" th:href="@{/student/profile}"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+        <div class="dash__sidebar-foot">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline btn-block" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </form>
+        </div>
+    </aside>
+    <div class="dash__overlay"></div>
+
+    <div class="dash__main">
+        <header class="dash__topbar">
+            <div class="u-flex u-items-center u-gap-2">
+                <button class="icon-btn dash__menu-btn" type="button" aria-label="Open menu"><i class="bi bi-list"></i></button>
+                <h1>My Profile</h1>
+            </div>
+            <div class="dash__topbar-actions">
+                <a class="icon-btn" th:href="@{/}" title="View site" aria-label="View site"><i class="bi bi-box-arrow-up-right"></i></a>
+                <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
+                <div class="dash__user">
+                    <span class="dash__avatar" th:text="${studentProfile != null ? #strings.substring(studentProfile.fullName,0,1) : 'S'}">S</span>
+                    <div>
+                        <strong th:text="${studentProfile != null ? studentProfile.fullName : 'Student'}">Student</strong><br>
+                        <small class="u-muted" th:text="${studentProfile != null ? studentProfile.studentId : ''}">ID</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dash__content">
+            <div class="js-flash" th:if="${successMessage}" data-type="success" th:attr="data-message=${successMessage}"></div>
+            <div class="js-flash" th:if="${errorMessage}" data-type="error" th:attr="data-message=${errorMessage}"></div>
+
+            <!-- No profile fallback -->
+            <div class="panel" th:if="${studentProfile == null}">
+                <div class="panel__body">
+                    <div class="alert alert-info">Your student profile is not available yet. Please contact the club administration if you think this is an error.</div>
+                    <a class="btn btn-primary u-mt-2" th:href="@{/student/dashboard}"><i class="bi bi-arrow-left"></i> Back to dashboard</a>
+                </div>
+            </div>
+
+            <div th:if="${studentProfile != null}" class="grid grid-2 u-align-start">
+                <!-- Profile card -->
+                <div class="panel">
+                    <div class="panel__body u-text-center">
+                        <span class="profile-avatar"
+                              th:if="${studentProfile.profilePictureUrl == null}"
+                              th:text="${#strings.substring(studentProfile.fullName,0,1)}">S</span>
+                        <img class="profile-avatar profile-avatar--img"
+                             th:if="${studentProfile.profilePictureUrl != null}"
+                             th:src="${studentProfile.profilePictureUrl}" alt="Profile picture">
+                        <h2 class="u-mt-2" th:text="${studentProfile.fullName}">Full Name</h2>
+                        <p class="u-muted" th:text="${studentProfile.studentId}">Student ID</p>
+                        <span class="badge"
+                              th:classappend="${studentProfile.active} ? 'badge--green' : 'badge--slate'"
+                              th:text="${studentProfile.active} ? 'Active' : 'Inactive'">Active</span>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div class="panel">
+                    <div class="panel__head"><h3>Account Details</h3></div>
+                    <div class="panel__body table-wrap">
+                        <table class="table">
+                            <tbody>
+                                <tr><th>Full Name</th><td th:text="${studentProfile.fullName}">-</td></tr>
+                                <tr><th>Student ID</th><td th:text="${studentProfile.studentId}">-</td></tr>
+                                <tr><th>University Email</th><td th:text="${studentProfile.email}">-</td></tr>
+                                <tr><th>Department</th><td th:text="${studentProfile.department}">-</td></tr>
+                                <tr><th>Batch</th><td th:text="${studentProfile.batch}">-</td></tr>
+                                <tr><th>Semester</th><td th:text="${studentProfile.semester} ?: '-'">-</td></tr>
+                                <tr><th>Phone</th><td th:text="${studentProfile.phone} ?: '-'">-</td></tr>
+                                <tr><th>Gender</th><td th:text="${studentProfile.gender} ?: '-'">-</td></tr>
+                                <tr><th>Member Since</th><td th:text="${studentProfile.createdAt != null ? #temporals.format(studentProfile.createdAt, 'dd MMM yyyy') : '-'}">-</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>
