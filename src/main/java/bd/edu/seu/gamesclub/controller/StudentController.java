@@ -92,21 +92,20 @@ public class StudentController {
 
     @PostMapping("/student/profile")
     public String updateProfile(Principal principal,
-                                @RequestParam String fullName,
-                                @RequestParam String department,
-                                @RequestParam String batch,
                                 @RequestParam String semester,
                                 @RequestParam String phone,
-                                @RequestParam String gender,
                                 @RequestParam(required = false) MultipartFile profileImage,
                                 RedirectAttributes ra) {
         String email = principal.getName();
         try {
-            // A new image (if any) replaces the picture; otherwise the existing one is kept.
+            // Only phone, semester and the profile photo are editable; all other
+            // ("core") fields are preserved from the existing profile.
+            StudentResponse current = studentService.getByEmail(email);
             Long mediaId = (profileImage != null && !profileImage.isEmpty())
-                    ? mediaService.store(profileImage, fullName).id() : null;
-            studentService.updateOwnProfile(email,
-                    new StudentUpdateRequest(fullName, department, batch, semester, phone, gender, mediaId));
+                    ? mediaService.store(profileImage, current.fullName()).id() : null;
+            studentService.updateOwnProfile(email, new StudentUpdateRequest(
+                    current.fullName(), current.department(), current.batch(),
+                    semester, phone, current.gender(), mediaId));
             ra.addFlashAttribute("successMessage", "Profile updated successfully.");
         } catch (BusinessException ex) {
             ra.addFlashAttribute("errorMessage", ex.getMessage());

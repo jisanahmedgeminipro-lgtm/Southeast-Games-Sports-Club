@@ -9,7 +9,7 @@
         <nav class="dash__nav" aria-label="Student navigation">
             <a th:href="@{/student/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
             <a th:href="@{/student/profile}"><i class="bi bi-person-circle"></i> My Profile</a>
-            <a th:href="@{/student/dashboard}"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a th:href="@{/student/membership}"><i class="bi bi-card-checklist"></i> Membership</a>
             <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
             <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
             <span class="label">Account</span>
@@ -33,7 +33,8 @@
                 <a class="icon-btn" th:href="@{/}" title="View site" aria-label="View site"><i class="bi bi-box-arrow-up-right"></i></a>
                 <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
                 <div class="dash__user">
-                    <span class="dash__avatar" th:text="${studentProfile != null ? #strings.substring(studentProfile.fullName,0,1) : 'S'}">S</span>
+                    <img class="dash__avatar" th:if="${studentProfile != null and studentProfile.profilePictureUrl != null}" th:src="${studentProfile.profilePictureUrl}" alt="Profile">
+                    <span class="dash__avatar" th:if="${studentProfile == null or studentProfile.profilePictureUrl == null}" th:text="${studentProfile != null ? #strings.substring(studentProfile.fullName,0,1) : 'S'}">S</span>
                     <div>
                         <strong th:text="${studentProfile != null ? studentProfile.fullName : 'Student'}">Student</strong><br>
                         <small class="u-muted" th:text="${studentProfile != null ? studentProfile.studentId : ''}">ID</small>
@@ -51,53 +52,46 @@
                 <a class="btn btn-ghost" th:href="@{/student/profile}"><i class="bi bi-arrow-left"></i> Back</a>
             </div>
 
+            <div class="alert alert-info">You can update your <strong>phone number</strong>, <strong>semester</strong> and <strong>profile photo</strong>. Core academic details (name, ID, department, batch) are managed by the club office.</div>
+
             <form class="form-card" th:action="@{/student/profile}" method="post" enctype="multipart/form-data" novalidate>
                 <div class="form-grid">
                     <div class="field">
-                        <label for="fullName">Full Name</label>
-                        <input class="control" id="fullName" name="fullName" type="text" required
-                               th:value="${studentProfile != null ? studentProfile.fullName : ''}">
-                    </div>
-                    <div class="field">
-                        <label for="phone">Phone</label>
+                        <label for="phone">Phone <span class="u-muted">(editable)</span></label>
                         <input class="control" id="phone" name="phone" type="text" required
                                th:value="${studentProfile != null ? studentProfile.phone : ''}">
                     </div>
                     <div class="field">
-                        <label for="department">Department</label>
-                        <input class="control" id="department" name="department" type="text" required
-                               th:value="${studentProfile != null ? studentProfile.department : ''}">
-                    </div>
-                    <div class="field">
-                        <label for="batch">Batch</label>
-                        <input class="control" id="batch" name="batch" type="text" required
-                               th:value="${studentProfile != null ? studentProfile.batch : ''}">
-                    </div>
-                    <div class="field">
-                        <label for="semester">Semester</label>
+                        <label for="semester">Semester <span class="u-muted">(editable)</span></label>
                         <input class="control" id="semester" name="semester" type="text" required
                                th:value="${studentProfile != null ? studentProfile.semester : ''}">
-                    </div>
-                    <div class="field">
-                        <label for="gender">Gender</label>
-                        <select class="control" id="gender" name="gender" required>
-                            <option value="MALE" th:selected="${studentProfile != null and studentProfile.gender == 'MALE'}">Male</option>
-                            <option value="FEMALE" th:selected="${studentProfile != null and studentProfile.gender == 'FEMALE'}">Female</option>
-                            <option value="OTHER" th:selected="${studentProfile != null and studentProfile.gender == 'OTHER'}">Other</option>
-                        </select>
                     </div>
                 </div>
 
                 <div class="form-grid">
                     <div class="field">
-                        <label for="emailRO">University Email (read-only)</label>
-                        <input class="control" id="emailRO" type="email" disabled
-                               th:value="${studentProfile != null ? studentProfile.email : ''}">
+                        <label>Full Name</label>
+                        <input class="control" type="text" disabled th:value="${studentProfile != null ? studentProfile.fullName : ''}">
                     </div>
                     <div class="field">
-                        <label for="studentIdRO">Student ID (read-only)</label>
-                        <input class="control" id="studentIdRO" type="text" disabled
-                               th:value="${studentProfile != null ? studentProfile.studentId : ''}">
+                        <label>Student ID</label>
+                        <input class="control" type="text" disabled th:value="${studentProfile != null ? studentProfile.studentId : ''}">
+                    </div>
+                    <div class="field">
+                        <label>University Email</label>
+                        <input class="control" type="email" disabled th:value="${studentProfile != null ? studentProfile.email : ''}">
+                    </div>
+                    <div class="field">
+                        <label>Department</label>
+                        <input class="control" type="text" disabled th:value="${studentProfile != null ? studentProfile.department : ''}">
+                    </div>
+                    <div class="field">
+                        <label>Batch</label>
+                        <input class="control" type="text" disabled th:value="${studentProfile != null ? studentProfile.batch : ''}">
+                    </div>
+                    <div class="field">
+                        <label>Gender</label>
+                        <input class="control" type="text" disabled th:value="${studentProfile != null ? studentProfile.gender : ''}">
                     </div>
                 </div>
 

@@ -5,6 +5,7 @@ import bd.edu.seu.gamesclub.service.MembershipService;
 import java.security.Principal;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,9 +25,11 @@ public class MembershipController {
 
     @GetMapping("/student/membership")
     @PreAuthorize("hasRole('STUDENT')")
-    public String membership() {
-        // The dashboard hosts the membership panel; redirect there.
-        return "redirect:/student/dashboard";
+    public String membership(Principal principal, Model model) {
+        model.addAttribute("membershipOpen", membershipService.isOpen());
+        model.addAttribute("myApplication", membershipService.getMyApplication(principal.getName()));
+        model.addAttribute("currentPeriod", membershipService.getCurrentPeriod());
+        return "student/membership";
     }
 
     @PostMapping("/student/membership/apply")

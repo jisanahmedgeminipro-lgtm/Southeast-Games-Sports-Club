@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Membership | SEU Games & Sports Club', 'Apply for SEU Games & Sports Club membership.')}"></head>
+<body>
+<div class="dash">
+
+    <aside class="dash__sidebar">
+        <a class="dash__brand" th:href="@{/}"><span class="brand__logo"><i class="bi bi-trophy"></i></span> SEU Sports</a>
+        <nav class="dash__nav" aria-label="Student navigation">
+            <a th:href="@{/student/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+            <a th:href="@{/student/profile}"><i class="bi bi-person-circle"></i> My Profile</a>
+            <a class="active" th:href="@{/student/membership}"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
+            <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
+            <span class="label">Account</span>
+            <a th:href="@{/student/profile/edit}"><i class="bi bi-gear"></i> Settings</a>
+        </nav>
+        <div class="dash__sidebar-foot">
+            <form th:action="@{/logout}" method="post">
+                <button class="btn btn-outline btn-block" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            </form>
+        </div>
+    </aside>
+    <div class="dash__overlay"></div>
+
+    <div class="dash__main">
+        <header class="dash__topbar">
+            <div class="u-flex u-items-center u-gap-2">
+                <button class="icon-btn dash__menu-btn" type="button" aria-label="Open menu"><i class="bi bi-list"></i></button>
+                <h1>Membership</h1>
+            </div>
+            <div class="dash__topbar-actions">
+                <a class="icon-btn" th:href="@{/}" title="View site" aria-label="View site"><i class="bi bi-box-arrow-up-right"></i></a>
+                <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
+            </div>
+        </header>
+
+        <div class="dash__content">
+            <div class="js-flash" th:if="${successMessage}" data-type="success" th:attr="data-message=${successMessage}"></div>
+            <div class="js-flash" th:if="${errorMessage}" data-type="error" th:attr="data-message=${errorMessage}"></div>
+
+            <!-- Status banner -->
+            <div class="stat-cards u-mb-3">
+                <div class="stat-card">
+                    <div class="stat-card__icon" th:classappend="${membershipOpen} ? '' : 'rose'"><i class="bi bi-card-checklist"></i></div>
+                    <div>
+                        <div class="stat-card__num" th:text="${membershipOpen} ? 'Open' : 'Closed'">Closed</div>
+                        <div class="stat-card__label">Membership Window</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon violet"><i class="bi bi-clipboard-check"></i></div>
+                    <div>
+                        <div class="stat-card__num" th:text="${myApplication != null ? myApplication.status : 'None'}">None</div>
+                        <div class="stat-card__label">Your Application</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2 u-align-start">
+                <!-- Apply / status panel -->
+                <div class="panel">
+                    <div class="panel__head"><h3>Membership Application</h3></div>
+                    <div class="panel__body">
+                        <!-- Closed -->
+                        <div th:if="${!membershipOpen}">
+                            <div class="alert alert-info">Membership is currently <strong>closed</strong>. We'll notify you by email as soon as it opens. You can't apply right now.</div>
+                        </div>
+
+                        <!-- Open, not yet applied -->
+                        <div th:if="${membershipOpen and myApplication == null}">
+                            <div class="alert alert-success">Membership is <strong>open</strong>! Submit your application below.</div>
+                            <form th:action="@{/student/membership/apply}" method="post" class="u-mt-2">
+                                <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-send"></i> Apply for Membership</button>
+                            </form>
+                        </div>
+
+                        <!-- Already applied -->
+                        <div th:if="${myApplication != null}">
+                            <p>Your application status:
+                                <span class="badge"
+                                      th:classappend="${myApplication.status == 'APPROVED'} ? 'badge--green' : (${myApplication.status == 'REJECTED'} ? 'badge--red' : 'badge--amber')"
+                                      th:text="${myApplication.status}">PENDING</span>
+                            </p>
+                            <p class="u-muted u-sm" th:if="${myApplication.appliedAt != null}">
+                                Applied on <span th:text="${#temporals.format(myApplication.appliedAt, 'dd MMM yyyy, hh:mm a')}">date</span>
+                            </p>
+                            <p th:if="${myApplication.remarks != null}"><strong>Remarks:</strong> <span th:text="${myApplication.remarks}">—</span></p>
+                            <div class="alert alert-info u-mt-2" th:if="${myApplication.status == 'PENDING'}">Your application is under review. You'll be notified by email once a decision is made.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current drive info -->
+                <div class="panel">
+                    <div class="panel__head"><h3>Current Drive</h3></div>
+                    <div class="panel__body">
+                        <div th:if="${currentPeriod == null}">
+                            <p class="u-muted">No membership drive has been announced yet.</p>
+                        </div>
+                        <div th:if="${currentPeriod != null}" class="table-wrap">
+                            <table class="table">
+                                <tbody>
+                                    <tr><th>Title</th><td th:text="${currentPeriod.title}">Drive</td></tr>
+                                    <tr><th>Status</th><td th:text="${currentPeriod.status}">—</td></tr>
+                                    <tr><th>Opening Date</th><td th:text="${currentPeriod.openingDate}">—</td></tr>
+                                    <tr><th>Closing Date</th><td th:text="${currentPeriod.closingDate}">—</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="u-mt-2" th:if="${currentPeriod.announcement != null}" th:text="${currentPeriod.announcement}">Announcement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{fragments/components :: overlays}"></th:block>
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

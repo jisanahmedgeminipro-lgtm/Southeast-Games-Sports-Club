@@ -9,7 +9,7 @@
         <nav class="dash__nav" aria-label="Student navigation">
             <a class="active" th:href="@{/student/dashboard}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
             <a th:href="@{/student/profile}"><i class="bi bi-person-circle"></i> My Profile</a>
-            <a href="#membership-panel"><i class="bi bi-card-checklist"></i> Membership</a>
+            <a th:href="@{/student/membership}"><i class="bi bi-card-checklist"></i> Membership</a>
             <a th:href="@{/events}"><i class="bi bi-calendar-event"></i> Events</a>
             <a th:href="@{/student/notices}"><i class="bi bi-megaphone"></i> Notices</a>
             <span class="label">Account</span>
@@ -32,7 +32,8 @@
             <div class="dash__topbar-actions">
                 <button class="icon-btn theme-toggle" data-theme-toggle type="button" aria-label="Toggle theme"><i class="bi bi-moon-stars"></i><i class="bi bi-sun"></i></button>
                 <div class="dash__user">
-                    <span class="dash__avatar" th:text="${studentProfile != null ? #strings.substring(studentProfile.fullName,0,1) : 'S'}">S</span>
+                    <img class="dash__avatar" th:if="${studentProfile != null and studentProfile.profilePictureUrl != null}" th:src="${studentProfile.profilePictureUrl}" alt="Profile">
+                    <span class="dash__avatar" th:if="${studentProfile == null or studentProfile.profilePictureUrl == null}" th:text="${studentProfile != null ? #strings.substring(studentProfile.fullName,0,1) : 'S'}">S</span>
                     <div>
                         <strong th:text="${studentProfile != null ? studentProfile.fullName : 'Student'}">Student</strong><br>
                         <small class="u-muted" th:text="${studentProfile != null ? studentProfile.studentId : ''}">ID</small>
@@ -54,7 +55,7 @@
                     <form th:if="${membershipOpen and myApplication == null}" th:action="@{/student/membership/apply}" method="post">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Apply for Membership</button>
                     </form>
-                    <a th:if="${membershipOpen and myApplication != null}" class="btn btn-outline" href="#membership-panel"><i class="bi bi-card-checklist"></i> View Application</a>
+                    <a th:if="${membershipOpen and myApplication != null}" class="btn btn-outline" th:href="@{/student/membership}"><i class="bi bi-card-checklist"></i> View Application</a>
                 </div>
             </div>
 
